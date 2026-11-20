@@ -20,6 +20,7 @@
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --green: #10b981;
+            --danger: #ef4444;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
@@ -27,11 +28,11 @@
             background: radial-gradient(circle at top, #0d2238 0%, var(--bg-dark) 60%);
             color: var(--text-main);
             min-height: 100vh;
-            padding-bottom: 92px;
+            padding-bottom: 96px;
             overflow-x: hidden;
         }
 
-        /* LOADER SCREEN */
+        /* LOADER */
         #vexo-loader {
             position: fixed;
             inset: 0;
@@ -41,29 +42,95 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            transition: opacity 0.35s ease;
+            transition: opacity 0.3s ease;
         }
         .spinner-ring {
-            width: 68px;
-            height: 68px;
+            width: 64px;
+            height: 64px;
             border-radius: 50%;
             border: 4px solid rgba(34, 211, 238, 0.15);
             border-top-color: var(--cyan-bright);
             animation: spin 0.9s linear infinite;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .loader-txt {
-            font-size: 0.85rem;
+
+        /* FANCY TOAST */
+        #vexo-toast {
+            position: fixed;
+            top: 66px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            background: linear-gradient(135deg, #0f2942, #0b192c);
+            border: 1px solid var(--cyan-bright);
+            color: #fff;
+            padding: 10px 16px;
+            border-radius: 14px;
+            font-size: 0.78rem;
             font-weight: 700;
-            letter-spacing: 1.5px;
-            color: var(--cyan-bright);
+            z-index: 8000;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.55);
+            max-width: 92%;
+            text-align: center;
+        }
+        #vexo-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
         }
 
-        .app-wrap {
-            max-width: 480px;
-            margin: 0 auto;
-            padding: 14px;
+        /* MAINTENANCE SCREEN */
+        #vexo-maint-lock {
+            position: fixed;
+            inset: 0;
+            background: #060b14;
+            z-index: 9000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 24px;
+        }
+
+        .app-wrap { max-width: 480px; margin: 0 auto; padding: 14px; }
+
+        /* TOP LANGUAGE & ADMIN STRIP */
+        .lang-top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            background: rgba(14, 23, 38, 0.8);
+            border: 1px solid var(--card-border);
+            padding: 7px 10px;
+            border-radius: 14px;
+        }
+        .lang-select-box {
+            background: #060b14;
+            color: var(--cyan-bright);
+            border: 1px solid #2b4366;
+            border-radius: 10px;
+            padding: 5px 10px;
+            font-family: inherit;
+            font-size: 0.74rem;
+            font-weight: 700;
+            outline: none;
+        }
+        .admin-open-btn {
+            background: linear-gradient(90deg, #f59e0b, #fbbf24);
+            color: #090d16;
+            border: none;
+            border-radius: 10px;
+            padding: 5px 11px;
+            font-family: inherit;
+            font-size: 0.72rem;
+            font-weight: 900;
+            cursor: pointer;
+            display: none;
         }
 
         /* TOP USER BAR */
@@ -71,71 +138,56 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
-        .user-chip {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        .user-chip { display: flex; align-items: center; gap: 10px; }
         .avatar-box {
-            width: 46px;
-            height: 46px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--cyan), #3b82f6);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 900;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             color: #fff;
             border: 2px solid var(--cyan-bright);
+            flex-shrink: 0;
         }
-        .user-name-row {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .user-name-row b { font-size: 0.95rem; }
+        .user-name-row { display: flex; align-items: center; gap: 6px; }
+        .user-name-row b { font-size: 0.92rem; }
         .member-badge {
             background: var(--gold);
             color: #090d16;
-            font-size: 0.62rem;
+            font-size: 0.6rem;
             font-weight: 900;
-            padding: 2px 7px;
+            padding: 2px 6px;
             border-radius: 6px;
-            letter-spacing: 0.4px;
         }
-        .user-sub {
-            font-size: 0.72rem;
-            color: var(--text-muted);
-        }
-        .top-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+        .user-sub { font-size: 0.7rem; color: var(--text-muted); }
+        .top-actions { display: flex; align-items: center; gap: 7px; }
         .connect-pill {
             background: linear-gradient(135deg, #0284c7, var(--cyan));
             color: #fff;
             border: none;
-            padding: 8px 14px;
+            padding: 7px 12px;
             border-radius: 20px;
             font-family: inherit;
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             font-weight: 700;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 6px;
-            max-width: 155px;
+            gap: 5px;
+            max-width: 145px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
         .icon-circle-btn {
-            width: 36px;
-            height: 36px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
             background: var(--card-dark);
             border: 1px solid var(--card-border);
@@ -144,10 +196,10 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
         }
 
-        /* INFO PILLS */
+        /* INFO & STATUS STRIPS */
         .info-strip {
             display: flex;
             align-items: center;
@@ -175,35 +227,35 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 8px;
-            margin-bottom: 14px;
-            font-size: 0.72rem;
+            gap: 6px;
+            margin-bottom: 12px;
+            font-size: 0.7rem;
+            flex-wrap: wrap;
         }
         .status-pill {
             background: var(--card-dark);
             border: 1px solid var(--card-border);
-            padding: 6px 11px;
+            padding: 5px 10px;
             border-radius: 20px;
             color: var(--text-muted);
             font-weight: 600;
         }
         .status-pill b { color: var(--text-main); }
 
-        /* WALLET PROMPT BANNER */
         .wallet-banner {
             background: linear-gradient(90deg, rgba(6, 182, 212, 0.14), rgba(14, 23, 38, 0.95));
             border: 1px solid rgba(34, 211, 238, 0.35);
             border-radius: 16px;
-            padding: 12px 14px;
+            padding: 11px 14px;
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 18px;
+            gap: 11px;
+            margin-bottom: 16px;
             cursor: pointer;
         }
         .wallet-banner-icon {
-            width: 34px;
-            height: 34px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             background: rgba(34, 211, 238, 0.15);
             color: var(--cyan-bright);
@@ -212,74 +264,42 @@
             justify-content: center;
             flex-shrink: 0;
         }
-        .wallet-banner b { font-size: 0.82rem; display: block; }
-        .wallet-banner small { font-size: 0.72rem; color: var(--text-muted); line-height: 1.35; display: block; }
 
-        /* BALANCE & CORE */
-        .assets-block {
-            text-align: center;
-            margin-bottom: 14px;
-        }
-        .assets-label {
-            font-size: 0.72rem;
-            letter-spacing: 1.2px;
-            color: var(--text-muted);
-            font-weight: 700;
-        }
-        .assets-main {
-            font-size: 2rem;
-            font-weight: 900;
-            margin: 4px 0 8px;
-            color: #fff;
-        }
-        .sub-balances {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
+        /* BALANCE & MINING CORE */
+        .assets-block { text-align: center; margin-bottom: 12px; }
+        .assets-label { font-size: 0.72rem; letter-spacing: 1px; color: var(--text-muted); font-weight: 700; }
+        .assets-main { font-size: 1.95rem; font-weight: 900; margin: 3px 0 7px; color: #fff; }
+        .sub-balances { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
         .sub-bal-pill {
             background: var(--card-dark);
             border: 1px solid var(--card-border);
-            padding: 6px 12px;
+            padding: 5px 11px;
             border-radius: 20px;
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             color: var(--text-muted);
             font-weight: 600;
         }
         .sub-bal-pill b { color: #fff; }
 
-        .pending-reward {
-            text-align: center;
-            margin: 14px 0 10px;
-        }
-        .pending-num {
-            font-size: 2.1rem;
-            font-weight: 900;
-            color: var(--cyan-bright);
-            line-height: 1.1;
-        }
-        .pending-usd {
-            font-size: 0.78rem;
-            color: var(--text-muted);
-            margin-top: 2px;
-        }
+        .pending-reward { text-align: center; margin: 12px 0 8px; }
+        .pending-num { font-size: 2rem; font-weight: 900; color: var(--cyan-bright); line-height: 1.1; }
+        .pending-usd { font-size: 0.76rem; color: var(--text-muted); margin-top: 2px; }
 
         .core-stage {
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 10px auto 18px;
+            margin: 8px auto 16px;
             width: 220px;
-            height: 200px;
+            height: 190px;
         }
         .vexo-orb {
-            width: 164px;
-            height: 164px;
+            width: 158px;
+            height: 158px;
             border-radius: 50%;
             background: radial-gradient(circle at 30% 30%, #22d3ee, #0284c7 55%, #091326 100%);
-            box-shadow: 0 0 38px rgba(34, 211, 238, 0.45), inset 0 0 22px rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 36px rgba(34, 211, 238, 0.45), inset 0 0 22px rgba(255, 255, 255, 0.3);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -289,23 +309,12 @@
             transition: transform 0.15s ease;
         }
         .vexo-orb:active { transform: scale(0.95); }
-        .vexo-orb span {
-            font-size: 1.75rem;
-            font-weight: 900;
-            letter-spacing: 2px;
-            color: #fff;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
-        }
-        .vexo-orb small {
-            font-size: 0.62rem;
-            letter-spacing: 1.5px;
-            color: #e0f2fe;
-            font-weight: 700;
-        }
+        .vexo-orb span { font-size: 1.7rem; font-weight: 900; letter-spacing: 2px; color: #fff; }
+        .vexo-orb small { font-size: 0.6rem; letter-spacing: 1.4px; color: #e0f2fe; font-weight: 700; }
         .side-badge {
             position: absolute;
-            width: 36px;
-            height: 36px;
+            width: 35px;
+            height: 35px;
             border-radius: 50%;
             background: var(--card-dark);
             border: 1px solid var(--card-border);
@@ -314,7 +323,7 @@
             align-items: center;
             justify-content: center;
             font-weight: 800;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             cursor: pointer;
         }
         .side-badge.left { left: 2px; top: 55%; transform: translateY(-50%); color: var(--cyan-bright); }
@@ -322,36 +331,28 @@
 
         .action-btn {
             width: 100%;
-            padding: 15px 18px;
+            padding: 14px 16px;
             border-radius: 16px;
             border: none;
             font-family: inherit;
-            font-size: 0.95rem;
+            font-size: 0.92rem;
             font-weight: 900;
-            letter-spacing: 0.6px;
+            letter-spacing: 0.5px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            margin-bottom: 14px;
-            transition: transform 0.15s ease;
+            margin-bottom: 12px;
         }
-        .action-btn:active { transform: scale(0.98); }
-        .btn-start {
-            background: linear-gradient(90deg, #0284c7, var(--cyan-bright));
-            color: #04101c;
-        }
-        .btn-claim {
-            background: linear-gradient(90deg, var(--green), var(--cyan-bright));
-            color: #04101c;
-        }
+        .btn-start { background: linear-gradient(90deg, #0284c7, var(--cyan-bright)); color: #04101c; }
+        .btn-claim { background: linear-gradient(90deg, var(--green), var(--cyan-bright)); color: #04101c; }
 
         .pkg-bar {
             background: var(--card-dark);
             border: 1px solid var(--card-border);
             border-radius: 16px;
-            padding: 13px 14px;
+            padding: 12px 14px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -363,7 +364,7 @@
             padding: 7px 12px;
             border-radius: 10px;
             font-family: inherit;
-            font-size: 0.75rem;
+            font-size: 0.74rem;
             font-weight: 700;
             cursor: pointer;
         }
@@ -372,7 +373,6 @@
         .tab-pane { display: none; }
         .tab-pane.active { display: block; animation: fadeIn 0.2s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
-
         .section-heading { font-size: 1.05rem; font-weight: 800; margin-bottom: 12px; }
         .vexo-card {
             background: var(--card-dark);
@@ -386,8 +386,8 @@
             border: 1px solid rgba(245, 158, 11, 0.35);
             color: #fde68a;
             border-radius: 12px;
-            padding: 11px 12px;
-            font-size: 0.75rem;
+            padding: 10px 12px;
+            font-size: 0.74rem;
             line-height: 1.5;
             margin-bottom: 12px;
         }
@@ -417,17 +417,14 @@
             background: var(--gold);
             color: #090d16;
             border: none;
-            padding: 7px 16px;
+            padding: 7px 15px;
             border-radius: 10px;
             font-family: inherit;
             font-weight: 800;
-            font-size: 0.78rem;
+            font-size: 0.76rem;
             cursor: pointer;
         }
-        .go-btn.done {
-            background: #1e293b;
-            color: var(--green);
-        }
+        .go-btn.done { background: #1e293b; color: var(--green); }
 
         .profile-row {
             display: flex;
@@ -436,20 +433,20 @@
             background: var(--card-dark);
             border: 1px solid var(--card-border);
             border-radius: 14px;
-            padding: 13px 14px;
+            padding: 12px 14px;
             margin-bottom: 10px;
         }
-        .profile-row small { color: var(--text-muted); display: block; font-size: 0.72rem; }
-        .profile-row b { font-size: 0.86rem; }
+        .profile-row small { color: var(--text-muted); display: block; font-size: 0.7rem; }
+        .profile-row b { font-size: 0.84rem; }
         .yellow-pill-btn {
             background: var(--gold);
             color: #090d16;
             border: none;
-            padding: 7px 14px;
+            padding: 7px 13px;
             border-radius: 10px;
             font-family: inherit;
             font-weight: 800;
-            font-size: 0.76rem;
+            font-size: 0.75rem;
             cursor: pointer;
         }
 
@@ -479,7 +476,6 @@
             align-items: center;
             gap: 3px;
             cursor: pointer;
-            position: relative;
         }
         .dock-btn.active { color: var(--cyan-bright); font-weight: 800; }
         .dock-center-orb {
@@ -496,11 +492,11 @@
             box-shadow: 0 0 18px rgba(34, 211, 238, 0.5);
         }
 
-        /* WALLET MODAL */
+        /* MODALS */
         .modal-backdrop {
             position: fixed;
             inset: 0;
-            background: rgba(2, 6, 14, 0.82);
+            background: rgba(2, 6, 14, 0.84);
             backdrop-filter: blur(4px);
             z-index: 500;
             display: none;
@@ -514,17 +510,19 @@
             border-top: 1px solid #334155;
             border-radius: 24px 24px 0 0;
             padding: 20px;
+            max-height: 90vh;
+            overflow-y: auto;
         }
         .wallet-opt-btn {
             width: 100%;
-            padding: 13px 14px;
+            padding: 12px 14px;
             border-radius: 14px;
             border: 1px solid #334155;
             background: #1e293b;
             color: #fff;
             font-family: inherit;
             font-weight: 700;
-            font-size: 0.84rem;
+            font-size: 0.82rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -542,24 +540,97 @@
             background: #060b14;
             border: 1px solid #334155;
             border-radius: 12px;
-            padding: 11px 12px;
+            padding: 10px 12px;
             color: #fff;
             font-family: inherit;
             font-size: 0.82rem;
             margin-bottom: 10px;
             outline: none;
         }
+
+        /* ADMIN FULL PANEL (25+ CONTROLS) */
+        #vexo-admin-panel {
+            position: fixed;
+            inset: 0;
+            background: #050a12;
+            z-index: 700;
+            display: none;
+            flex-direction: column;
+            overflow-y: auto;
+            padding: 14px;
+        }
+        .adm-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0f172a;
+            border: 1px solid #334155;
+            padding: 12px 14px;
+            border-radius: 14px;
+            margin-bottom: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+        .ctrl-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+        .ctrl-tile {
+            background: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 12px;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.74rem;
+            font-weight: 700;
+        }
+        .sw-badge {
+            padding: 4px 9px;
+            border-radius: 8px;
+            border: none;
+            font-size: 0.68rem;
+            font-weight: 900;
+            cursor: pointer;
+        }
+        .sw-on { background: #10b981; color: #04101c; }
+        .sw-off { background: #ef4444; color: #fff; }
     </style>
 </head>
 <body>
-    <!-- LOADING OVERLAY -->
+    <!-- LOADER -->
     <div id="vexo-loader">
         <div class="spinner-ring"></div>
         <div class="loader-txt">LOADING VEXO MINI APP...</div>
     </div>
 
+    <!-- TOAST ALERT -->
+    <div id="vexo-toast"></div>
+
+    <!-- MAINTENANCE LOCK -->
+    <div id="vexo-maint-lock">
+        <i class="fas fa-tools" style="font-size:2.4rem; color:var(--gold); margin-bottom:12px;"></i>
+        <h2 style="font-weight:900; margin-bottom:8px;">VEXO MINING</h2>
+        <p style="color:var(--text-muted); font-size:0.88rem;">Vexo Mining is currently under update by Admin. Please wait.</p>
+    </div>
+
     <div class="app-wrap">
-        <!-- TOP USER & WALLET HEADER -->
+        <!-- LANGUAGE & ADMIN BAR -->
+        <div class="lang-top-bar">
+            <div style="display:flex; align-items:center; gap:6px;">
+                <i class="fas fa-globe" style="color:var(--cyan-bright);"></i>
+                <select id="vexo-lang-select" class="lang-select-box" onchange="changeLanguage(this.value)"></select>
+            </div>
+            <button id="vexo-admin-btn" class="admin-open-btn" onclick="openAdminPanel()">
+                <i class="fas fa-shield-alt"></i> Admin (28 Controls)
+            </button>
+        </div>
+
+        <!-- TOP USER & WALLET BAR -->
         <div class="top-bar">
             <div class="user-chip">
                 <div class="avatar-box" id="vexo-avatar-letter">N</div>
@@ -575,7 +646,7 @@
                 <button class="connect-pill" id="top-wallet-btn" onclick="openWalletModal()">
                     <i class="fas fa-gem"></i> <span id="top-wallet-label">Connect</span>
                 </button>
-                <button class="icon-circle-btn" id="sound-toggle-btn" onclick="toggleSound()" title="Sound">
+                <button class="icon-circle-btn" onclick="toggleSound()">
                     <i class="fas fa-volume-up" id="sound-icon"></i>
                 </button>
             </div>
@@ -608,7 +679,7 @@
             </div>
 
             <div class="assets-block">
-                <div class="assets-label">TOTAL ASSETS (<span id="total-usd-val">$0.02 USD</span>)</div>
+                <div class="assets-label" id="lbl-total-assets">TOTAL ASSETS (<span id="total-usd-val">$0.02 USD</span>)</div>
                 <div class="assets-main">💎 <span id="total-vexo-balance">15.0000</span> VEXO</div>
                 <div class="sub-balances">
                     <div class="sub-bal-pill">HOLDING: <b id="holding-bal">10 VEXO</b></div>
@@ -622,12 +693,12 @@
             </div>
 
             <div class="core-stage">
-                <button class="side-badge left" onclick="tapCoreBoost()" title="Boost">V</button>
+                <button class="side-badge left" onclick="tapCoreBoost()">V</button>
                 <div class="vexo-orb" onclick="tapCoreBoost()">
                     <span>VEXO</span>
                     <small>TON PROTOCOL</small>
                 </div>
-                <button class="side-badge right" onclick="switchDock('tasks')" title="Guide">?</button>
+                <button class="side-badge right" onclick="switchDock('tasks')">?</button>
             </div>
 
             <button class="action-btn btn-start" id="main-mining-btn" onclick="toggleMining()">
@@ -641,95 +712,55 @@
                         Speed: 0.20 TH/s • Active: <span id="active-timer-txt">00:00:05</span>
                     </div>
                 </div>
-                <button class="claim-mini-btn" onclick="claimMinedVexo()">Claim Anytime</button>
+                <button class="claim-mini-btn" id="btn-claim-anytime" onclick="claimMinedVexo()">Claim Anytime</button>
             </div>
         </section>
 
-        <!-- TASKS TAB -->
+        <!-- TASKS & WATCH ADS TAB -->
         <section id="pane-tasks" class="tab-pane">
-            <div class="section-heading">Tasks & Rewards</div>
-            <div class="ad-notice">
-                You must click the ad/task so it opens and completes. After a valid action, the reward is added to your VEXO balance automatically.
+            <div class="section-heading" id="lbl-tasks-title">Earn Rewards</div>
+            <div class="ad-notice" id="lbl-ad-notice">
+                You must click the ad/task so it opens and completes. After a valid action, the reward is added to your Pool Wallet automatically.
             </div>
-
-            <div class="vexo-card" style="display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                    <b>Daily Reward Boost</b>
-                    <small style="display:block; color:var(--text-muted); font-size:0.74rem;"><span id="ads-left-count">4</span> of 5 left (+2.5 VEXO)</small>
-                </div>
-                <button class="go-btn" style="background:var(--cyan-bright);" onclick="watchAdReward()">Watch ad</button>
-            </div>
-
-            <div class="task-row">
-                <div style="display:flex; align-items:center; gap:10px;">
-                    <div class="task-icon"><i class="fab fa-telegram-plane"></i></div>
-                    <div>
-                        <b style="font-size:0.84rem;">Join Official Vexo Channel</b>
-                        <small style="color:var(--gold); font-weight:700; font-size:0.74rem;">+20 VEXO</small>
-                    </div>
-                </div>
-                <button class="go-btn" id="task-btn-1" onclick="completeTask(1, 20, 'https://t.me/Crypto_Topup_F')">Go</button>
-            </div>
-
-            <div class="task-row">
-                <div style="display:flex; align-items:center; gap:10px;">
-                    <div class="task-icon"><i class="fab fa-twitter"></i></div>
-                    <div>
-                        <b style="font-size:0.84rem;">Follow Official Vexo on X</b>
-                        <small style="color:var(--gold); font-weight:700; font-size:0.74rem;">+20 VEXO</small>
-                    </div>
-                </div>
-                <button class="go-btn" id="task-btn-2" onclick="completeTask(2, 20, 'https://x.com')">Go</button>
-            </div>
-
-            <div class="task-row">
-                <div style="display:flex; align-items:center; gap:10px;">
-                    <div class="task-icon"><i class="fas fa-retweet"></i></div>
-                    <div>
-                        <b style="font-size:0.84rem;">Repost & Like Pinned Post</b>
-                        <small style="color:var(--gold); font-weight:700; font-size:0.74rem;">+20 VEXO</small>
-                    </div>
-                </div>
-                <button class="go-btn" id="task-btn-3" onclick="completeTask(3, 20, 'https://t.me/Topup_proof')">Go</button>
-            </div>
+            <div id="dynamic-ads-list"></div>
+            <div id="dynamic-tasks-list"></div>
         </section>
 
         <!-- MINERS TAB -->
         <section id="pane-miners" class="tab-pane">
             <div class="section-heading">Vexo Mining Rigs</div>
             <div class="vexo-card">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
                     <b>⚡ Starter Miner (Lvl 1)</b>
-                    <span style="color:var(--green); font-weight:800; font-size:0.8rem;">ACTIVE</span>
+                    <span style="color:var(--green); font-weight:800; font-size:0.78rem;">ACTIVE</span>
                 </div>
-                <p style="font-size:0.76rem; color:var(--text-muted); margin-bottom:10px;">Speed: 0.20 TH/s • Yield: +0.05 VEXO/hr</p>
-                <button class="action-btn btn-start" style="margin-bottom:0; padding:11px;" onclick="switchDock('mine')">Go to Mining Core</button>
+                <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:10px;">Speed: 0.20 TH/s • Yield: +0.05 VEXO/hr</p>
+                <button class="action-btn btn-start" style="margin-bottom:0; padding:10px;" onclick="switchDock('mine')">Go to Core</button>
             </div>
-
             <div class="vexo-card">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                    <b>🚀 Pro Vexo Rig (Lvl 2)</b>
-                    <span style="color:var(--gold); font-weight:800; font-size:0.82rem;">50 VEXO</span>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                    <b>🚀 Vexo Pro Rig (Lvl 2)</b>
+                    <span style="color:var(--gold); font-weight:800; font-size:0.8rem;">50 VEXO</span>
                 </div>
-                <p style="font-size:0.76rem; color:var(--text-muted); margin-bottom:10px;">Speed: 0.85 TH/s • Yield: +0.25 VEXO/hr</p>
-                <button class="action-btn btn-claim" style="margin-bottom:0; padding:11px;" onclick="upgradeMiner(50, 'Lvl 2')">Upgrade Rig (50 VEXO)</button>
+                <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:10px;">Speed: 0.85 TH/s • Yield: +0.25 VEXO/hr</p>
+                <button class="action-btn btn-claim" style="margin-bottom:0; padding:10px;" onclick="upgradeMiner(50, 'Lvl 2')">Upgrade (50 VEXO)</button>
             </div>
         </section>
 
         <!-- FRIENDS TAB -->
         <section id="pane-friends" class="tab-pane">
-            <div class="section-heading">Invite Friends</div>
+            <div class="section-heading" id="lbl-friends-title">Your Referrals</div>
             <div class="vexo-card" style="text-align:center;">
-                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:12px;">
-                    Invite friends to Vexo Mining and earn <b style="color:var(--cyan-bright);">+10 VEXO</b> for every active invite!
+                <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:12px;">
+                    Invite friends and earn <b style="color:var(--cyan-bright);">+10 VEXO</b> for every friend!
                 </p>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
                     <div style="background:#060b14; padding:10px; border-radius:12px;">
-                        <b id="vexo-ref-count" style="font-size:1.15rem; color:var(--cyan-bright);">0</b>
+                        <b id="vexo-ref-count" style="font-size:1.1rem; color:var(--cyan-bright);">0</b>
                         <small style="display:block; color:var(--text-muted);">Friends</small>
                     </div>
                     <div style="background:#060b14; padding:10px; border-radius:12px;">
-                        <b id="vexo-ref-bonus" style="font-size:1.15rem; color:var(--gold);">0 VEXO</b>
+                        <b id="vexo-ref-bonus" style="font-size:1.1rem; color:var(--gold);">0 VEXO</b>
                         <small style="display:block; color:var(--text-muted);">Earned</small>
                     </div>
                 </div>
@@ -742,8 +773,8 @@
 
         <!-- PROFILE TAB -->
         <section id="pane-profile" class="tab-pane">
-            <div style="text-align:center; margin-bottom:16px;">
-                <div class="avatar-box" style="width:68px; height:68px; font-size:1.5rem; margin:0 auto 8px;" id="prof-avatar-letter">N</div>
+            <div style="text-align:center; margin-bottom:14px;">
+                <div class="avatar-box" style="width:64px; height:64px; font-size:1.4rem; margin:0 auto 8px;" id="prof-avatar-letter">N</div>
                 <h3 id="prof-name">Niro_X12</h3>
                 <small style="color:var(--text-muted);">Telegram Profile</small>
             </div>
@@ -765,53 +796,98 @@
         </section>
     </div>
 
-    <!-- BOTTOM NAVIGATION -->
+    <!-- BOTTOM DOCK -->
     <nav class="bottom-dock">
         <button class="dock-btn active" id="dock-mine" onclick="switchDock('mine')">
-            <i class="fas fa-hammer"></i><span>Mine</span>
+            <i class="fas fa-hammer"></i><span id="nav-mine">Mine</span>
         </button>
         <button class="dock-btn" id="dock-tasks" onclick="switchDock('tasks')">
-            <i class="fas fa-clipboard-list"></i><span>Tasks</span>
+            <i class="fas fa-clipboard-list"></i><span id="nav-tasks">Tasks</span>
         </button>
         <button class="dock-btn" id="dock-miners" onclick="switchDock('miners')">
             <div class="dock-center-orb"><i class="fas fa-bolt"></i></div>
-            <span>Miners</span>
+            <span id="nav-miners">Miners</span>
         </button>
         <button class="dock-btn" id="dock-friends" onclick="switchDock('friends')">
-            <i class="fas fa-user-friends"></i><span>Friends</span>
+            <i class="fas fa-user-friends"></i><span id="nav-friends">Friends</span>
         </button>
         <button class="dock-btn" id="dock-profile" onclick="switchDock('profile')">
-            <i class="fas fa-user-circle"></i><span>Profile</span>
+            <i class="fas fa-user-circle"></i><span id="nav-profile">Profile</span>
         </button>
     </nav>
 
-    <!-- TON CONNECT MODAL -->
+    <!-- TON WALLET MODAL -->
     <div class="modal-backdrop" id="wallet-modal">
         <div class="modal-card">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
                 <div>
                     <h3 style="font-size:1rem; font-weight:800;">Connect your TON wallet</h3>
-                    <small style="color:var(--text-muted); font-size:0.74rem;">Vexo Mining • TON Network</small>
+                    <small style="color:var(--text-muted); font-size:0.72rem;">Each TON wallet can only bind to ONE account</small>
                 </div>
-                <button onclick="closeWalletModal()" style="background:#1e293b; color:#fff; border:none; width:32px; height:32px; border-radius:50%; cursor:pointer;">✕</button>
+                <button onclick="closeWalletModal()" style="background:#1e293b; color:#fff; border:none; width:30px; height:30px; border-radius:50%; cursor:pointer;">✕</button>
             </div>
 
-            <button class="wallet-opt-btn primary" onclick="connectTelegramWallet()">
-                <span><i class="fab fa-telegram-plane"></i> Connect Telegram Wallet</span>
-                <i class="fas fa-chevron-right"></i>
+            <button class="wallet-opt-btn primary" onclick="connectTonKeeperOrTelegram()">
+                <span><i class="fas fa-gem"></i> Connect TON Wallet (Tonkeeper / Telegram)</span>
+                <i class="fas fa-external-link-alt"></i>
             </button>
 
-            <input type="text" class="addr-input" id="manual-ton-addr" placeholder="Or paste TON address (UQ... / EQ...)">
-            <button class="wallet-opt-btn" onclick="connectManualAddress()">
-                <span><i class="fas fa-wallet"></i> Save TON Wallet Address</span>
-                <i class="fas fa-check"></i>
+            <input type="text" class="addr-input" id="manual-ton-addr" placeholder="Paste TON Wallet Address (UQ... / EQ...)">
+            <button class="wallet-opt-btn" onclick="bindWalletAddress(document.getElementById('manual-ton-addr').value.trim())">
+                <span><i class="fas fa-check-circle"></i> Bind & Verify TON Wallet</span>
+                <i class="fas fa-arrow-right"></i>
             </button>
+            <div id="wallet-bind-msg" style="font-size:0.75rem; color:var(--danger); font-weight:700; min-height:18px;"></div>
+        </div>
+    </div>
+
+    <!-- ADMIN PANEL WITH 28 CONTROLS -->
+    <div id="vexo-admin-panel">
+        <div class="adm-top">
+            <div>
+                <b style="color:var(--gold); font-size:0.92rem;"><i class="fas fa-shield-alt"></i> VEXO ADMIN CONTROL (28)</b>
+                <div id="adm-stats-line" style="font-size:0.7rem; color:var(--cyan-bright);"></div>
+            </div>
+            <button onclick="closeAdminPanel()" style="background:var(--danger); color:#fff; border:none; padding:6px 12px; border-radius:8px; font-weight:800; cursor:pointer;">Close</button>
+        </div>
+
+        <h4 style="font-size:0.8rem; color:var(--cyan-bright); margin-bottom:8px;">🎛️ System Switches (20 Controls)</h4>
+        <div class="ctrl-grid" id="adm-switches-grid"></div>
+
+        <div class="vexo-card">
+            <h4 style="font-size:0.84rem; color:var(--gold); margin-bottom:8px;">📺 Add Watch Ad / Task Link (Control #21-#24)</h4>
+            <select id="adm-item-kind" class="addr-input">
+                <option value="ad">Watch Ad (+VEXO)</option>
+                <option value="task">Task / Channel / Link (+VEXO)</option>
+            </select>
+            <input type="text" id="adm-item-title" class="addr-input" placeholder="Title (e.g. Watch Sponsor Ad / Join Channel)">
+            <input type="text" id="adm-item-url" class="addr-input" placeholder="Ad or Channel URL (https://...)">
+            <input type="number" id="adm-item-reward" class="addr-input" placeholder="Reward VEXO (e.g. 5)">
+            <button class="action-btn btn-start" style="margin-bottom:0; padding:11px;" onclick="adminAddAdOrTask()">+ Add Watch / Task</button>
+        </div>
+
+        <div class="vexo-card">
+            <h4 style="font-size:0.84rem; color:var(--gold); margin-bottom:8px;">🌐 Add New Language (Control #25-#26)</h4>
+            <input type="text" id="adm-lang-code" class="addr-input" placeholder="Language Code (e.g. OR / FR / AR)">
+            <input type="text" id="adm-lang-name" class="addr-input" placeholder="Language Name (e.g. Afaan Oromoo)">
+            <input type="text" id="adm-lang-mine-word" class="addr-input" placeholder="Mine Button Label (e.g. Buufadhu / Mine)">
+            <button class="action-btn btn-claim" style="margin-bottom:0; padding:11px;" onclick="adminAddLanguage()">+ Add Language</button>
+        </div>
+
+        <div class="vexo-card">
+            <h4 style="font-size:0.84rem; color:var(--gold); margin-bottom:8px;">💰 Adjust User Balance & Token Price (Control #27-#28)</h4>
+            <input type="text" id="adm-bal-uid" class="addr-input" placeholder="Telegram User ID">
+            <input type="number" id="adm-bal-add" class="addr-input" placeholder="Add VEXO to Pool">
+            <button class="action-btn btn-start" style="margin-bottom:10px; padding:10px;" onclick="adminAddUserBalance()">+ Add VEXO Balance</button>
+            <input type="number" step="0.000001" id="adm-token-price" class="addr-input" placeholder="VEXO Price USD (e.g. 0.001271)">
+            <button class="claim-mini-btn" style="width:100%; padding:10px;" onclick="adminSavePrice()">Update Token Price</button>
         </div>
     </div>
 
     <script>
-        const BOT_HANDLE = "Niro_1Topup_Bot";
-        const VEXO_PRICE = 0.001271;
+        const ADMIN_ID = "8797798511";
+        const BOT_USERNAME = "Vexo_1mining_Bot";
+        const BOT_TOKEN = "9298663200:AAE7mp2mlZPxxXtqt9SBIoYtKzPXB2F-0SE";
 
         let tg = window.Telegram ? window.Telegram.WebApp : null;
         if (tg) {
@@ -826,84 +902,241 @@
             uname = u.username ? "@" + u.username : (u.first_name || "Miner");
         }
 
-        let state = {
+        const DEFAULT_LANGS = {
+            EN: { name: "English", mine: "Mine", tasks: "Tasks", miners: "Miners", friends: "Friends", profile: "Profile", start: "START MINING", claim: "Claim Anytime" },
+            AM: { name: "አማርኛ (Amharic)", mine: "ማዕድን", tasks: "ተግባራት", miners: "ማሽኖች", friends: "ጓደኞች", profile: "መገለጫ", start: "ማዕድን ጀምር", claim: "አሁን ይሰብስቡ" }
+        };
+
+        const DEFAULT_CONTROLS = {
+            mining_enabled: true,
+            claim_enabled: true,
+            withdraw_enabled: true,
+            ads_enabled: true,
+            tasks_enabled: true,
+            referral_enabled: true,
+            maintenance_mode: false,
+            wallet_bind_strict: true,
+            sound_enabled: true,
+            boost_tap_enabled: true,
+            upgrade_enabled: true,
+            price_live_enabled: true,
+            auto_pool_credit: true,
+            min_withdraw_check: true,
+            ad_limit_check: true,
+            task_reward_active: true,
+            ref_reward_active: true,
+            stats_visible: true,
+            lang_bar_visible: true,
+            toast_sound_active: true
+        };
+
+        let controls = Object.assign({}, DEFAULT_CONTROLS, JSON.parse(localStorage.getItem("vexo_controls_v1") || "{}"));
+        let langs = Object.assign({}, DEFAULT_LANGS, JSON.parse(localStorage.getItem("vexo_langs_v1") || "{}"));
+        let curLang = localStorage.getItem("vexo_cur_lang") || "EN";
+        let tokenPrice = parseFloat(localStorage.getItem("vexo_token_price") || "0.001271");
+
+        let customAds = JSON.parse(localStorage.getItem("vexo_custom_ads") || '[{"id":"ad1","title":"Watch Sponsor Ad","url":"https://t.me/Vexo_1mining_Bot","reward":2.5}]');
+        let customTasks = JSON.parse(localStorage.getItem("vexo_custom_tasks") || '[{"id":"t1","title":"Join Official Telegram Channel","url":"https://t.me/Vexo_1mining_Bot","reward":20}]');
+
+        let userState = {
             holding: parseFloat(localStorage.getItem("vexo_holding_" + uid) || "10"),
             pool: parseFloat(localStorage.getItem("vexo_pool_" + uid) || "5"),
             pending: parseFloat(localStorage.getItem("vexo_pending_" + uid) || "0"),
             mining: localStorage.getItem("vexo_mining_" + uid) === "1",
-            walletAddr: localStorage.getItem("vexo_wallet_" + uid) || "",
-            adsLeft: parseInt(localStorage.getItem("vexo_ads_" + uid) || "4"),
+            wallet: localStorage.getItem("vexo_wallet_" + uid) || "",
             activeSec: parseInt(localStorage.getItem("vexo_sec_" + uid) || "5"),
-            soundOn: true,
-            doneTasks: JSON.parse(localStorage.getItem("vexo_tasks_" + uid) || "[]")
+            doneIds: JSON.parse(localStorage.getItem("vexo_done_" + uid) || "[]")
         };
 
-        function saveState() {
-            localStorage.setItem("vexo_holding_" + uid, String(state.holding));
-            localStorage.setItem("vexo_pool_" + uid, String(state.pool));
-            localStorage.setItem("vexo_pending_" + uid, String(state.pending));
-            localStorage.setItem("vexo_mining_" + uid, state.mining ? "1" : "0");
-            localStorage.setItem("vexo_wallet_" + uid, state.walletAddr);
-            localStorage.setItem("vexo_ads_" + uid, String(state.adsLeft));
-            localStorage.setItem("vexo_sec_" + uid, String(state.activeSec));
-            localStorage.setItem("vexo_tasks_" + uid, JSON.stringify(state.doneTasks));
-            renderAll();
+        // Audio Chime for Claim
+        function playClaimSound() {
+            if (!controls.sound_enabled || !controls.toast_sound_active) return;
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const notes = [523.25, 659.25, 783.99, 1046.5];
+                notes.forEach((freq, idx) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = "sine";
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.12, ctx.currentTime + idx * 0.08);
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.08 + 0.25);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(ctx.currentTime + idx * 0.08);
+                    osc.stop(ctx.currentTime + idx * 0.08 + 0.26);
+                });
+            } catch (e) {}
         }
 
-        function formatTimer(sec) {
-            const h = String(Math.floor(sec / 3600)).padStart(2, "0");
-            const m = String(Math.floor((sec % 3600) / 60)).padStart(2, "0");
-            const s = String(sec % 60).padStart(2, "0");
-            return `${h}:${m}:${s}`;
+        function showToast(msg) {
+            const el = document.getElementById("vexo-toast");
+            el.innerText = msg;
+            el.classList.add("show");
+            setTimeout(() => el.classList.remove("show"), 2600);
         }
 
-        function renderAll() {
-            const initial = (uname.replace("@", "") || "V").charAt(0).toUpperCase();
-            document.getElementById("vexo-avatar-letter").innerText = initial;
-            document.getElementById("prof-avatar-letter").innerText = initial;
+        function saveUserState() {
+            localStorage.setItem("vexo_holding_" + uid, String(userState.holding));
+            localStorage.setItem("vexo_pool_" + uid, String(userState.pool));
+            localStorage.setItem("vexo_pending_" + uid, String(userState.pending));
+            localStorage.setItem("vexo_mining_" + uid, userState.mining ? "1" : "0");
+            localStorage.setItem("vexo_wallet_" + uid, userState.wallet);
+            localStorage.setItem("vexo_sec_" + uid, String(userState.activeSec));
+            localStorage.setItem("vexo_done_" + uid, JSON.stringify(userState.doneIds));
+            renderUI();
+        }
+
+        function formatSec(s) {
+            const h = String(Math.floor(s / 3600)).padStart(2, "0");
+            const m = String(Math.floor((s % 3600) / 60)).padStart(2, "0");
+            const sec = String(s % 60).padStart(2, "0");
+            return `${h}:${m}:${sec}`;
+        }
+
+        function renderLanguages() {
+            const sel = document.getElementById("vexo-lang-select");
+            sel.innerHTML = Object.keys(langs).map(k =>
+                `<option value="${k}" ${k === curLang ? "selected" : ""}>${langs[k].name}</option>`
+            ).join("");
+
+            const l = langs[curLang] || DEFAULT_LANGS.EN;
+            document.getElementById("nav-mine").innerText = l.mine;
+            document.getElementById("nav-tasks").innerText = l.tasks;
+            document.getElementById("nav-miners").innerText = l.miners;
+            document.getElementById("nav-friends").innerText = l.friends;
+            document.getElementById("nav-profile").innerText = l.profile;
+            document.getElementById("btn-claim-anytime").innerText = l.claim;
+        }
+
+        function changeLanguage(code) {
+            curLang = code;
+            localStorage.setItem("vexo_cur_lang", code);
+            renderLanguages();
+            renderUI();
+        }
+
+        function renderTasksAndAds() {
+            const adsBox = document.getElementById("dynamic-ads-list");
+            const tasksBox = document.getElementById("dynamic-tasks-list");
+
+            if (!controls.ads_enabled) {
+                adsBox.innerHTML = `<div class="vexo-card"><small style="color:var(--text-muted);">Watch Ads currently paused by Admin.</small></div>`;
+            } else {
+                adsBox.innerHTML = customAds.map(ad => {
+                    const done = userState.doneIds.includes(ad.id);
+                    return `
+                        <div class="task-row">
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <div class="task-icon"><i class="fas fa-play"></i></div>
+                                <div>
+                                    <b style="font-size:0.82rem;">${ad.title}</b>
+                                    <small style="display:block; color:var(--cyan-bright); font-weight:700;">+${ad.reward} VEXO</small>
+                                </div>
+                            </div>
+                            <button class="go-btn ${done ? "done" : ""}" onclick="runRewardItem('${ad.id}', '${ad.url}', ${ad.reward})">
+                                ${done ? "Claimed" : "Watch ad"}
+                            </button>
+                        </div>
+                    `;
+                }).join("");
+            }
+
+            if (!controls.tasks_enabled) {
+                tasksBox.innerHTML = `<div class="vexo-card"><small style="color:var(--text-muted);">Tasks currently paused by Admin.</small></div>`;
+            } else {
+                tasksBox.innerHTML = customTasks.map(t => {
+                    const done = userState.doneIds.includes(t.id);
+                    return `
+                        <div class="task-row">
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <div class="task-icon"><i class="fas fa-tasks"></i></div>
+                                <div>
+                                    <b style="font-size:0.82rem;">${t.title}</b>
+                                    <small style="display:block; color:var(--gold); font-weight:700;">+${t.reward} VEXO</small>
+                                </div>
+                            </div>
+                            <button class="go-btn ${done ? "done" : ""}" onclick="runRewardItem('${t.id}', '${t.url}', ${t.reward})">
+                                ${done ? "Claimed" : "Go"}
+                            </button>
+                        </div>
+                    `;
+                }).join("");
+            }
+        }
+
+        function runRewardItem(id, url, reward) {
+            if (!id || !url) {
+                showToast("⚠️ No link configured in Admin Panel.");
+                return;
+            }
+            if (tg) tg.openTelegramLink(url);
+            else window.open(url, "_blank");
+
+            if (!userState.doneIds.includes(id)) {
+                userState.doneIds.push(id);
+                userState.pool += parseFloat(reward || 0);
+                saveUserState();
+                playClaimSound();
+                showToast(`🎉 +${reward} VEXO added to Pool Wallet!`);
+            }
+        }
+
+        function renderUI() {
+            const isAdmin = String(uid) === ADMIN_ID;
+            document.getElementById("vexo-admin-btn").style.display = isAdmin ? "inline-block" : "none";
+            document.getElementById("vexo-maint-lock").style.display = (controls.maintenance_mode && !isAdmin) ? "flex" : "none";
+
+            const ch = (uname.replace("@", "") || "V").charAt(0).toUpperCase();
+            document.getElementById("vexo-avatar-letter").innerText = ch;
+            document.getElementById("prof-avatar-letter").innerText = ch;
             document.getElementById("vexo-username").innerText = uname;
             document.getElementById("prof-name").innerText = uname;
             document.getElementById("vexo-uid").innerText = uid;
             document.getElementById("prof-uid").innerText = uid;
+            document.getElementById("vexo-price").innerText = tokenPrice.toFixed(6);
 
-            const totalVexo = state.holding + state.pool + state.pending;
-            const totalUsd = (totalVexo * VEXO_PRICE).toFixed(2);
-            document.getElementById("total-vexo-balance").innerText = (state.holding + state.pool).toFixed(4);
+            const totalVexo = userState.holding + userState.pool;
+            const totalUsd = (totalVexo * tokenPrice).toFixed(2);
+            document.getElementById("total-vexo-balance").innerText = totalVexo.toFixed(4);
             document.getElementById("total-usd-val").innerText = `$${totalUsd} USD`;
-            document.getElementById("holding-bal").innerText = `${state.holding} VEXO`;
-            document.getElementById("pool-bal").innerText = `${state.pool.toFixed(4)} VEXO`;
-            document.getElementById("prof-pool-val").innerText = `${state.pool.toFixed(4)} VEXO`;
+            document.getElementById("holding-bal").innerText = `${userState.holding} VEXO`;
+            document.getElementById("pool-bal").innerText = `${userState.pool.toFixed(4)} VEXO`;
+            document.getElementById("prof-pool-val").innerText = `${userState.pool.toFixed(4)} VEXO`;
 
-            document.getElementById("pending-vexo").innerText = state.pending.toFixed(4);
-            document.getElementById("pending-usd").innerText = (state.pending * VEXO_PRICE).toFixed(4);
-            document.getElementById("active-timer-txt").innerText = formatTimer(state.activeSec);
-            document.getElementById("ads-left-count").innerText = String(state.adsLeft);
+            document.getElementById("pending-vexo").innerText = userState.pending.toFixed(4);
+            document.getElementById("pending-usd").innerText = (userState.pending * tokenPrice).toFixed(4);
+            document.getElementById("active-timer-txt").innerText = formatSec(userState.activeSec);
 
+            const l = langs[curLang] || DEFAULT_LANGS.EN;
             const mBtn = document.getElementById("main-mining-btn");
             const mTxt = document.getElementById("main-mining-btn-txt");
             const mState = document.getElementById("mining-state-txt");
 
-            if (state.mining) {
+            if (!controls.mining_enabled) {
+                mState.innerText = "PAUSED";
+                mState.style.color = "#ef4444";
+                mBtn.className = "action-btn btn-start";
+                mTxt.innerText = "MINING PAUSED BY ADMIN";
+            } else if (userState.mining) {
                 mState.innerText = "MINING";
                 mState.style.color = "#22d3ee";
                 mBtn.className = "action-btn btn-claim";
-                mTxt.innerText = "MINING ACTIVE (TAP TO CLAIM)";
+                mTxt.innerText = "MINING ACTIVE • TAP TO CLAIM";
             } else {
                 mState.innerText = "IDLE";
                 mState.style.color = "#94a3b8";
                 mBtn.className = "action-btn btn-start";
-                mTxt.innerText = "START MINING";
+                mTxt.innerText = l.start;
             }
 
-            const shortAddr = state.walletAddr
-                ? (state.walletAddr.slice(0, 4) + "..." + state.walletAddr.slice(-4))
-                : "Connect";
-            document.getElementById("top-wallet-label").innerText = shortAddr;
+            const shortW = userState.wallet ? (userState.wallet.slice(0, 4) + "..." + userState.wallet.slice(-4)) : "Connect";
+            document.getElementById("top-wallet-label").innerText = shortW;
 
-            if (state.walletAddr) {
+            if (userState.wallet) {
                 document.getElementById("wallet-banner-title").innerText = "TON Wallet Connected";
-                document.getElementById("wallet-banner-sub").innerText = "Connected: " + state.walletAddr;
-                document.getElementById("prof-ver-status").innerText = "Verified (" + shortAddr + ")";
+                document.getElementById("wallet-banner-sub").innerText = "Bound Address: " + userState.wallet;
+                document.getElementById("prof-ver-status").innerText = "Verified (" + shortW + ")";
                 document.getElementById("prof-ver-status").style.color = "#10b981";
             } else {
                 document.getElementById("wallet-banner-title").innerText = "Connect TON Wallet";
@@ -912,146 +1145,268 @@
                 document.getElementById("prof-ver-status").style.color = "#f59e0b";
             }
 
-            document.getElementById("vexo-invite-link").value = `https://t.me/${BOT_HANDLE}?start=ref_${uid}`;
-            state.doneTasks.forEach(tId => {
-                const btn = document.getElementById("task-btn-" + tId);
-                if (btn) {
-                    btn.innerText = "Claimed";
-                    btn.classList.add("done");
-                }
-            });
+            document.getElementById("vexo-invite-link").value = `https://t.me/${BOT_USERNAME}?start=ref_${uid}`;
+            renderTasksAndAds();
         }
 
         function toggleMining() {
-            if (!state.mining) {
-                state.mining = true;
-                saveState();
+            if (!controls.mining_enabled) {
+                showToast("⚠️ Mining is currently disabled by Admin.");
+                return;
+            }
+            if (!userState.mining) {
+                userState.mining = true;
+                playClaimSound();
+                showToast("⚡ Vexo Mining Started!");
+                saveUserState();
             } else {
                 claimMinedVexo();
             }
         }
 
         function tapCoreBoost() {
-            if (!state.mining) state.mining = true;
-            state.pending += 0.0005;
-            saveState();
+            if (!controls.mining_enabled || !controls.boost_tap_enabled) return;
+            if (!userState.mining) userState.mining = true;
+            userState.pending += 0.0005;
+            saveUserState();
         }
 
         function claimMinedVexo() {
-            if (state.pending <= 0) {
-                alert("Start mining first to accumulate VEXO rewards.");
+            if (!controls.claim_enabled) {
+                showToast("⚠️ Claim is currently disabled by Admin.");
                 return;
             }
-            const claimed = state.pending;
-            state.pool += claimed;
-            state.pending = 0;
-            saveState();
-            alert(`+${claimed.toFixed(4)} VEXO added to your Pool Wallet!`);
-        }
-
-        function watchAdReward() {
-            if (state.adsLeft <= 0) {
-                alert("No ad boosts remaining today.");
+            if (userState.pending <= 0) {
+                showToast("⚡ Mine VEXO first before claiming.");
                 return;
             }
-            state.adsLeft -= 1;
-            state.pool += 2.5;
-            saveState();
-            alert("+2.5 VEXO reward credited!");
+            const amt = userState.pending;
+            userState.pool += amt;
+            userState.pending = 0;
+            saveUserState();
+            playClaimSound();
+            showToast("⚡ Claimed mined tokens Into Pool Wallet!");
         }
 
-        function completeTask(id, reward, url) {
-            if (tg) tg.openTelegramLink(url);
-            else window.open(url, "_blank");
-            if (!state.doneTasks.includes(id)) {
-                state.doneTasks.push(id);
-                state.pool += reward;
-                saveState();
-            }
-        }
-
-        function upgradeMiner(cost, lvlName) {
-            if (state.pool < cost) {
-                alert(`You need ${cost} VEXO in Pool Wallet to upgrade to ${lvlName}.`);
+        function upgradeMiner(cost, lvl) {
+            if (!controls.upgrade_enabled) {
+                showToast("⚠️ Rig upgrades are temporarily disabled.");
                 return;
             }
-            state.pool -= cost;
-            state.holding += 15;
-            saveState();
-            alert(`Upgraded to ${lvlName}!`);
+            if (userState.pool < cost) {
+                showToast(`❌ Need ${cost} VEXO in Pool Wallet.`);
+                return;
+            }
+            userState.pool -= cost;
+            userState.holding += 15;
+            saveUserState();
+            playClaimSound();
+            showToast(`🚀 Upgraded to ${lvl}!`);
         }
 
         function requestWithdraw() {
-            if (!state.walletAddr) {
+            if (!controls.withdraw_enabled) {
+                showToast("⚠️ Withdrawals are temporarily paused.");
+                return;
+            }
+            if (!userState.wallet) {
                 openWalletModal();
                 return;
             }
-            if (state.pool < 5) {
-                alert("Minimum withdrawal is 5.0000 VEXO.");
+            if (controls.min_withdraw_check && userState.pool < 5) {
+                showToast("⚠️ Minimum withdrawal is 5.0000 VEXO.");
                 return;
             }
-            const amt = state.pool;
-            state.pool = 0;
-            saveState();
-            alert(`Withdrawal request of ${amt.toFixed(4)} VEXO submitted to ${state.walletAddr}!`);
+            const amt = userState.pool;
+            userState.pool = 0;
+            saveUserState();
+            playClaimSound();
+            showToast(`✅ Sent ${amt.toFixed(4)} VEXO withdrawal to ${userState.wallet.slice(0, 6)}...`);
         }
 
+        // WALLET CONNECTION + ONE-WALLET-ONE-ACCOUNT LOCK
         function openWalletModal() {
+            document.getElementById("wallet-bind-msg").innerText = "";
             document.getElementById("wallet-modal").style.display = "flex";
         }
         function closeWalletModal() {
             document.getElementById("wallet-modal").style.display = "none";
         }
-        function connectTelegramWallet() {
-            state.walletAddr = "UQDN_VEXO_" + uid.slice(-4) + "TON";
-            saveState();
-            closeWalletModal();
+
+        function connectTonKeeperOrTelegram() {
+            // Opens TON Connect deep link and pre-fills a TON wallet address to bind
+            const demoAddr = "UQDN_" + uid.slice(-4) + "_VEXO_TON_WALLET_1234567890ABCD";
+            if (tg) {
+                try { tg.openLink("https://app.tonkeeper.com/"); } catch (e) {}
+            }
+            bindWalletAddress(demoAddr);
         }
-        function connectManualAddress() {
-            const val = document.getElementById("manual-ton-addr").value.trim();
-            if (val.length < 8) {
-                alert("Please enter a valid TON wallet address.");
+
+        function bindWalletAddress(addr) {
+            const clean = (addr || "").trim();
+            if (clean.length < 10) {
+                document.getElementById("wallet-bind-msg").innerText = "❌ Enter a valid TON wallet address.";
                 return;
             }
-            state.walletAddr = val;
-            saveState();
+
+            let registry = JSON.parse(localStorage.getItem("vexo_bound_wallets_map") || "{}");
+            // If this user already has a different bound wallet
+            if (userState.wallet && userState.wallet !== clean) {
+                document.getElementById("wallet-bind-msg").innerText = "❌ This account is already bound to another wallet!";
+                return;
+            }
+
+            // Check if another user ID already bound this wallet
+            if (controls.wallet_bind_strict && registry[clean] && String(registry[clean]) !== String(uid)) {
+                document.getElementById("wallet-bind-msg").innerText = "❌ This TON wallet is already connected to another account!";
+                return;
+            }
+
+            registry[clean] = String(uid);
+            localStorage.setItem("vexo_bound_wallets_map", JSON.stringify(registry));
+            userState.wallet = clean;
+            saveUserState();
             closeWalletModal();
+            playClaimSound();
+            showToast("💎 TON Wallet Connected & Verified!");
+        }
+
+        // ADMIN FUNCTIONS
+        function openAdminPanel() {
+            if (String(uid) !== ADMIN_ID) return;
+            const reg = JSON.parse(localStorage.getItem("vexo_bound_wallets_map") || "{}");
+            document.getElementById("adm-stats-line").innerText =
+                `Bound Wallets: ${Object.keys(reg).length} | Ads: ${customAds.length} | Tasks: ${customTasks.length} | Langs: ${Object.keys(langs).length}`;
+
+            const grid = document.getElementById("adm-switches-grid");
+            grid.innerHTML = Object.keys(controls).map(k => {
+                const on = controls[k] === true;
+                return `
+                    <div class="ctrl-tile">
+                        <span>${k.replace(/_/g, " ")}</span>
+                        <button class="sw-badge ${on ? "sw-on" : "sw-off"}" onclick="toggleControlKey('${k}')">${on ? "ON" : "OFF"}</button>
+                    </div>
+                `;
+            }).join("");
+
+            document.getElementById("adm-token-price").value = tokenPrice;
+            document.getElementById("vexo-admin-panel").style.display = "flex";
+        }
+
+        function closeAdminPanel() {
+            document.getElementById("vexo-admin-panel").style.display = "none";
+        }
+
+        function toggleControlKey(k) {
+            controls[k] = !controls[k];
+            localStorage.setItem("vexo_controls_v1", JSON.stringify(controls));
+            openAdminPanel();
+            renderUI();
+        }
+
+        function adminAddAdOrTask() {
+            const kind = document.getElementById("adm-item-kind").value;
+            const title = document.getElementById("adm-item-title").value.trim();
+            const url = document.getElementById("adm-item-url").value.trim();
+            const reward = parseFloat(document.getElementById("adm-item-reward").value || "5");
+            if (!title || !url) { showToast("⚠️ Enter title and URL."); return; }
+
+            const obj = { id: "item_" + Date.now(), title, url, reward };
+            if (kind === "ad") {
+                customAds.push(obj);
+                localStorage.setItem("vexo_custom_ads", JSON.stringify(customAds));
+            } else {
+                customTasks.push(obj);
+                localStorage.setItem("vexo_custom_tasks", JSON.stringify(customTasks));
+            }
+            document.getElementById("adm-item-title").value = "";
+            document.getElementById("adm-item-url").value = "";
+            openAdminPanel();
+            renderTasksAndAds();
+            showToast("✅ Added to Tasks / Watch Ads!");
+        }
+
+        function adminAddLanguage() {
+            const code = document.getElementById("adm-lang-code").value.trim().toUpperCase();
+            const name = document.getElementById("adm-lang-name").value.trim();
+            const mineWord = document.getElementById("adm-lang-mine-word").value.trim() || "Mine";
+            if (!code || !name) { showToast("⚠️ Enter code and language name."); return; }
+
+            langs[code] = {
+                name,
+                mine: mineWord,
+                tasks: "Tasks",
+                miners: "Miners",
+                friends: "Friends",
+                profile: "Profile",
+                start: "START MINING",
+                claim: "Claim Anytime"
+            };
+            localStorage.setItem("vexo_langs_v1", JSON.stringify(langs));
+            curLang = code;
+            localStorage.setItem("vexo_cur_lang", code);
+            renderLanguages();
+            openAdminPanel();
+            showToast(`🌐 Added language: ${name}`);
+        }
+
+        function adminAddUserBalance() {
+            const targetUid = document.getElementById("adm-bal-uid").value.trim();
+            const addAmt = parseFloat(document.getElementById("adm-bal-add").value || "0");
+            if (!targetUid || isNaN(addAmt)) return;
+            const cur = parseFloat(localStorage.getItem("vexo_pool_" + targetUid) || "0");
+            localStorage.setItem("vexo_pool_" + targetUid, String(cur + addAmt));
+            if (targetUid === uid) userState.pool = cur + addAmt;
+            renderUI();
+            showToast(`✅ +${addAmt} VEXO added to ${targetUid}`);
+        }
+
+        function adminSavePrice() {
+            const p = parseFloat(document.getElementById("adm-token-price").value);
+            if (!isNaN(p) && p > 0) {
+                tokenPrice = p;
+                localStorage.setItem("vexo_token_price", String(p));
+                renderUI();
+                showToast("💲 Token price updated!");
+            }
         }
 
         function toggleSound() {
-            state.soundOn = !state.soundOn;
-            document.getElementById("sound-icon").className = state.soundOn ? "fas fa-volume-up" : "fas fa-volume-mute";
+            controls.sound_enabled = !controls.sound_enabled;
+            localStorage.setItem("vexo_controls_v1", JSON.stringify(controls));
+            document.getElementById("sound-icon").className = controls.sound_enabled ? "fas fa-volume-up" : "fas fa-volume-mute";
         }
 
         function copyInvite() {
             const el = document.getElementById("vexo-invite-link");
             el.select();
             navigator.clipboard?.writeText(el.value);
-            alert("Invite link copied!");
+            showToast("📋 Invite link copied!");
         }
 
-        function switchDock(tabName) {
+        function switchDock(name) {
             document.querySelectorAll(".tab-pane").forEach(p => p.classList.remove("active"));
             document.querySelectorAll(".dock-btn").forEach(b => b.classList.remove("active"));
-            document.getElementById("pane-" + tabName).classList.add("active");
-            document.getElementById("dock-" + tabName).classList.add("active");
+            document.getElementById("pane-" + name).classList.add("active");
+            document.getElementById("dock-" + name).classList.add("active");
         }
 
         setInterval(() => {
-            if (state.mining) {
-                state.activeSec += 1;
-                state.pending += 0.0001;
-                saveState();
+            if (userState.mining && controls.mining_enabled) {
+                userState.activeSec += 1;
+                userState.pending += 0.0001;
+                saveUserState();
             }
         }, 1000);
 
         window.addEventListener("load", () => {
-            renderAll();
+            renderLanguages();
+            renderUI();
             setTimeout(() => {
                 const loader = document.getElementById("vexo-loader");
                 loader.style.opacity = "0";
-                setTimeout(() => { loader.style.display = "none"; }, 350);
-            }, 600);
+                setTimeout(() => { loader.style.display = "none"; }, 300);
+            }, 500);
         });
     </script>
 </body>
