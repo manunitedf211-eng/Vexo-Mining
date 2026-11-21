@@ -66,7 +66,7 @@
             border-radius: 14px;
             font-size: 0.78rem;
             font-weight: 700;
-            z-index: 8500;
+            z-index: 8600;
             opacity: 0;
             pointer-events: none;
             transition: all 0.25s ease;
@@ -76,11 +76,11 @@
         }
         #vexo-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-        #vexo-maint-lock {
+        #vexo-block-screen {
             position: fixed;
             inset: 0;
             background: #060b14;
-            z-index: 9000;
+            z-index: 9200;
             display: none;
             flex-direction: column;
             align-items: center;
@@ -97,7 +97,7 @@
             align-items: center;
             gap: 8px;
             margin-bottom: 10px;
-            background: rgba(14, 23, 38, 0.8);
+            background: rgba(14, 23, 38, 0.85);
             border: 1px solid var(--card-border);
             padding: 7px 10px;
             border-radius: 14px;
@@ -141,7 +141,9 @@
             color: #fff;
             border: 2px solid var(--cyan-bright);
             flex-shrink: 0;
+            overflow: hidden;
         }
+        .avatar-box img { width: 100%; height: 100%; object-fit: cover; }
         .user-name-row { display: flex; align-items: center; gap: 6px; }
         .user-name-row b { font-size: 0.92rem; }
         .member-badge {
@@ -354,7 +356,6 @@
             cursor: pointer;
         }
 
-        /* TABS & TAC-STYLE CARDS */
         .tab-pane { display: none; }
         .tab-pane.active { display: block; animation: fadeIn 0.2s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
@@ -413,7 +414,6 @@
         }
         .go-btn.done { background: #1e293b; color: var(--green); }
 
-        /* LEVELS GRID (MINERS TAB LIKE TAC) */
         .lvl-range-row {
             display: flex;
             gap: 6px;
@@ -456,7 +456,6 @@
         .lvl-btn-active { background: var(--cyan-bright); color: #04101c; }
         .lvl-btn-buy { background: #0f2942; border: 1px solid var(--cyan); color: var(--cyan-bright); }
 
-        /* FRIENDS TREE & REWARD BOXES */
         .tree-visual {
             display: flex;
             flex-direction: column;
@@ -473,7 +472,6 @@
             box-shadow: 0 0 10px rgba(245, 158, 11, 0.45);
         }
 
-        /* PROFILE ROWS */
         .profile-row {
             display: flex;
             justify-content: space-between;
@@ -497,8 +495,11 @@
             font-size: 0.75rem;
             cursor: pointer;
         }
+        .wd-minus-red {
+            color: #ef4444 !important;
+            font-weight: 900 !important;
+        }
 
-        /* BOTTOM NAV */
         .bottom-dock {
             position: fixed;
             bottom: 0;
@@ -540,11 +541,10 @@
             box-shadow: 0 0 18px rgba(34, 211, 238, 0.5);
         }
 
-        /* MODALS */
         .modal-backdrop {
             position: fixed;
             inset: 0;
-            background: rgba(2, 6, 14, 0.86);
+            background: rgba(2, 6, 14, 0.88);
             backdrop-filter: blur(4px);
             z-index: 500;
             display: none;
@@ -587,7 +587,7 @@
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 8px;
-            margin: 10px 0 14px;
+            margin: 10px 0 12px;
         }
         .w-mini-tile {
             background: #1e293b;
@@ -625,7 +625,6 @@
             outline: none;
         }
 
-        /* ADMIN PANEL (28 CONTROLS) */
         #vexo-admin-panel {
             position: fixed;
             inset: 0;
@@ -674,10 +673,12 @@
 
     <div id="vexo-toast"></div>
 
-    <div id="vexo-maint-lock">
-        <i class="fas fa-tools" style="font-size:2.4rem; color:var(--gold); margin-bottom:12px;"></i>
-        <h2 style="font-weight:900; margin-bottom:8px;">VEXO MINING</h2>
-        <p style="color:var(--text-muted); font-size:0.88rem;">Vexo Mining is currently under update by Admin. Please wait.</p>
+    <!-- CHANNEL / MULTI-ACC BLOCK OVERLAY -->
+    <div id="vexo-block-screen">
+        <i class="fas fa-shield-alt" style="font-size:2.4rem; color:var(--gold); margin-bottom:12px;"></i>
+        <h2 id="block-screen-title" style="font-weight:900; margin-bottom:8px;">JOIN REQUIRED</h2>
+        <p id="block-screen-desc" style="color:var(--text-muted); font-size:0.86rem; max-width:340px; margin-bottom:16px;"></p>
+        <div id="block-channel-btns" style="width:100%; max-width:320px;"></div>
     </div>
 
     <div class="app-wrap">
@@ -692,10 +693,10 @@
             </button>
         </div>
 
-        <!-- TOP USER & WALLET BAR -->
+        <!-- TOP USER & WALLET BAR (BOT PROFILE SHOWS VEXO) -->
         <div class="top-bar">
             <div class="user-chip">
-                <div class="avatar-box" id="vexo-avatar-letter">N</div>
+                <div class="avatar-box" id="vexo-bot-avatar">VEXO</div>
                 <div>
                     <div class="user-name-row">
                         <b id="vexo-username">@Niro_X12</b>
@@ -789,7 +790,7 @@
             <div id="dynamic-tasks-list"></div>
         </section>
 
-        <!-- 3. MINERS / LEVELS TAB (TAC LEVEL JOURNEY STYLE) -->
+        <!-- 3. MINERS / LEVELS TAB -->
         <section id="pane-miners" class="tab-pane">
             <div class="vexo-card">
                 <small style="color:var(--text-muted); font-size:0.68rem; font-weight:700;">MY LEVEL JOURNEY</small>
@@ -811,17 +812,17 @@
             <div class="lvl-grid" id="vexo-levels-grid"></div>
         </section>
 
-        <!-- 4. FRIENDS TAB (TAC FRIENDS STYLE) -->
+        <!-- 4. FRIENDS TAB -->
         <section id="pane-friends" class="tab-pane">
             <div class="section-heading">Friends</div>
-            <div class="section-sub">Refer friends. Every 24 hours, 5% of what they mine is added to your Team Wallet.</div>
+            <div class="section-sub">Refer friends & earn <b>+20%</b> per invite + 5% team mining!</div>
 
             <div class="ad-notice" style="background:rgba(6,182,212,0.1); border-color:rgba(34,211,238,0.35); color:#bae6fd;">
-                A friend who joins with your link and connects a wallet is counted. <b>20%</b> of the referral reward is added to your available Pool balance immediately.
+                Invite friends with your link: earn <b>+20%</b> reward per invite + 5% of team mining every 24 hours.
             </div>
 
             <div class="vexo-card">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
                     <div>
                         <small style="color:var(--text-muted); font-size:0.7rem;">Your Invite Link</small>
                         <div id="vexo-invite-txt" style="font-size:0.76rem; color:var(--cyan-bright); font-weight:700; word-break:break-all;"></div>
@@ -832,12 +833,15 @@
 
             <div class="vexo-card">
                 <b>Your Referrals</b>
-                <div style="font-size:0.74rem; color:var(--text-muted); margin-top:2px;"><span id="vexo-ref-count">0</span> successful • <span id="vexo-ref-count-2">0</span> total</div>
+                <div style="font-size:0.76rem; color:var(--cyan-bright); font-weight:700; margin-top:4px;">
+                    <span id="vexo-ref-count">0</span> total invited • <span id="vexo-ref-earned-disp">0.0000 VEXO</span> earned
+                </div>
+                <div id="vexo-invited-list" style="margin-top:8px; font-size:0.72rem; color:var(--text-muted);">No invited friends yet.</div>
             </div>
 
             <div class="vexo-card" style="display:flex; justify-content:space-between; align-items:center;">
                 <div>
-                    <b>Referral Reward</b>
+                    <b>Referral Reward (+20%)</b>
                     <small style="display:block; color:var(--text-muted); font-size:0.72rem;">Earned: <span id="vexo-ref-bonus">0.0000 VEXO</span></small>
                 </div>
                 <button class="claim-mini-btn" onclick="claimReferralBonus()">Claim</button>
@@ -853,7 +857,6 @@
 
             <div class="vexo-card" style="text-align:center;">
                 <b style="font-size:0.84rem;">Latest invited friends</b>
-                <div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;">No invited friends yet.</div>
                 <div class="tree-visual">
                     <div class="tree-row"><div class="tree-node"></div></div>
                     <div class="tree-row"><div class="tree-node"></div><div class="tree-node"></div><div class="tree-node"></div></div>
@@ -862,10 +865,10 @@
             </div>
         </section>
 
-        <!-- 5. PROFILE TAB (ONLY REAL TELEGRAM PROFILE INFO) -->
+        <!-- 5. PROFILE TAB (MINI APP PROFILE SHOWS 💎, REAL TG PHOTO & NAME) -->
         <section id="pane-profile" class="tab-pane">
             <div style="text-align:center; margin-bottom:14px;">
-                <div class="avatar-box" style="width:66px; height:66px; font-size:1.45rem; margin:0 auto 8px;" id="prof-avatar-letter">N</div>
+                <div class="avatar-box" style="width:68px; height:68px; font-size:1.5rem; margin:0 auto 8px;" id="prof-avatar-box">💎</div>
                 <h3 id="prof-fullname">Niro</h3>
                 <div id="prof-tg-username" style="font-size:0.78rem; color:var(--cyan-bright); font-weight:700;">@Niro_X12</div>
                 <small style="color:var(--text-muted); font-size:0.7rem;">Telegram Profile</small>
@@ -875,7 +878,10 @@
                 <div><small>User ID</small><b id="prof-uid">8797798511</b></div>
             </div>
             <div class="profile-row">
-                <div><small>Telegram Username</small><b id="prof-username-val">@Niro_X12</b></div>
+                <div>
+                    <small>Balance (ETB & USDT)</small>
+                    <b id="prof-bal-etb-usdt" style="color:var(--cyan-bright);">0.00 ETB • $0.00 USDT</b>
+                </div>
             </div>
             <div class="profile-row">
                 <div><small>TON Wallet Status</small><b id="prof-ver-status">Unverified (Connect TON Wallet)</b></div>
@@ -885,8 +891,12 @@
                 <div><small>Pool Wallet</small><b id="prof-pool-val" style="color:var(--green);">5.0000 VEXO</b></div>
             </div>
             <div class="profile-row">
-                <div><small>Withdraw</small><b>Transfer Available Pool Balance to Wallet</b></div>
-                <button class="yellow-pill-btn" onclick="requestWithdraw()">Withdraw</button>
+                <div>
+                    <small>Withdraw</small>
+                    <b>Transfer Available Pool Balance to Wallet</b>
+                    <div id="prof-last-wd-indicator" style="font-size:0.74rem; margin-top:3px;"></div>
+                </div>
+                <button class="yellow-pill-btn" onclick="openWithdrawModal()">Withdraw</button>
             </div>
         </section>
     </div>
@@ -911,13 +921,13 @@
         </button>
     </nav>
 
-    <!-- TON WALLET MODAL (MULTIPLE WALLETS + TONKEEPER SEND VERIFICATION) -->
+    <!-- WALLET CONNECTION MODAL (4 WALLETS + TONKEEPER SEND VERIFY) -->
     <div class="modal-backdrop" id="wallet-modal">
         <div class="modal-card">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
                 <div>
                     <h3 style="font-size:1rem; font-weight:800;">Connect your TON wallet</h3>
-                    <small style="color:var(--text-muted); font-size:0.7rem;">Choose wallet & verify connection</small>
+                    <small style="color:var(--text-muted); font-size:0.7rem;">Select wallet • One wallet per account</small>
                 </div>
                 <button onclick="closeWalletModal()" style="background:#1e293b; color:#fff; border:none; width:30px; height:30px; border-radius:50%; cursor:pointer;">✕</button>
             </div>
@@ -955,6 +965,34 @@
         </div>
     </div>
 
+    <!-- WITHDRAW MODAL (USDT, TELEBIRR, CBE, BEP20 | MIN 0.2$ USDT / 25 ETB) -->
+    <div class="modal-backdrop" id="withdraw-modal">
+        <div class="modal-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <h3 style="font-size:1rem; font-weight:900;">Withdraw Funds</h3>
+                <button onclick="closeWithdrawModal()" style="background:#1e293b; color:#fff; border:none; width:30px; height:30px; border-radius:50%; cursor:pointer;">✕</button>
+            </div>
+
+            <label style="font-size:0.72rem; color:var(--text-muted); display:block; margin-bottom:5px;">1. Select Withdraw Method</label>
+            <select id="wd-method-select" class="addr-input" onchange="updateWithdrawFields()">
+                <option value="USDT">USDT (Min: 0.2$ USDT — Binance ID)</option>
+                <option value="Telebirr">Telebirr (Min: 25 ETB — Name & Phone)</option>
+                <option value="CBE">CBE (Min: 25 ETB — Name & Account)</option>
+                <option value="BEP20">BEP20 (Min: 0.2$ USDT — 0x... Address)</option>
+            </select>
+
+            <div id="wd-dynamic-inputs"></div>
+
+            <label style="font-size:0.72rem; color:var(--text-muted); display:block; margin-bottom:4px;">Amount to Withdraw</label>
+            <input type="number" step="0.01" id="wd-amount-input" class="addr-input" placeholder="Enter amount (e.g. 0.5 for USDT or 50 for ETB)">
+
+            <button class="action-btn btn-claim" style="margin-bottom:0;" onclick="submitWithdrawForm()">
+                <i class="fas fa-paper-plane"></i> Confirm & Send Withdraw Request
+            </button>
+            <div id="wd-status-msg" style="font-size:0.75rem; font-weight:700; margin-top:8px; min-height:18px;"></div>
+        </div>
+    </div>
+
     <!-- LEVEL DETAIL MODAL -->
     <div class="modal-backdrop" id="level-modal">
         <div class="modal-card">
@@ -970,7 +1008,7 @@
         </div>
     </div>
 
-    <!-- ADMIN PANEL (28 CONTROLS) -->
+    <!-- ADMIN PANEL (28 CONTROLS + PROOF CHANNEL MANAGER) -->
     <div id="vexo-admin-panel">
         <div class="adm-top">
             <div>
@@ -982,6 +1020,16 @@
 
         <h4 style="font-size:0.78rem; color:var(--cyan-bright); margin-bottom:8px;">🎛️ System Switches (20 Controls)</h4>
         <div class="ctrl-grid" id="adm-switches-grid"></div>
+
+        <div class="vexo-card">
+            <h4 style="font-size:0.82rem; color:var(--gold); margin-bottom:8px;">📢 Proof Channel Manager (Add / Remove)</h4>
+            <input type="text" id="adm-proof-ch-input" class="addr-input" placeholder="Proof Channel @username or link (e.g. @Topup_proof)">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                <button class="action-btn btn-claim" style="margin-bottom:0; padding:9px;" onclick="adminSetProofChannel()">+ Add / Save Proof Ch</button>
+                <button class="action-btn" style="background:var(--danger); color:#fff; margin-bottom:0; padding:9px;" onclick="adminRemoveProofChannel()">- Remove Proof Ch</button>
+            </div>
+            <div id="adm-current-proof-ch" style="font-size:0.72rem; color:var(--cyan-bright); margin-top:6px;"></div>
+        </div>
 
         <div class="vexo-card">
             <h4 style="font-size:0.82rem; color:var(--gold); margin-bottom:8px;">📺 Add Watch Ad / Task Link</h4>
@@ -1016,7 +1064,10 @@
     <script>
         const ADMIN_ID = "8797798511";
         const BOT_USERNAME = "Vexo_1mining_Bot";
+        const BOT_TOKEN = "9298663200:AAE7mp2mlZPxxXtqt9SBIoYtKzPXB2F-0SE";
         const VEXO_RECEIVER_TON = "UQDNT64fLCgQhWy8bS7G9KZSSkll5OKlj8uflVX8m";
+        const OFFICIAL_CHANNEL = "@Crypto_Topup_F";
+        const ETB_RATE = 135;
 
         let tg = window.Telegram ? window.Telegram.WebApp : null;
         if (tg) {
@@ -1026,12 +1077,14 @@
         let uid = "8797798511";
         let tgFirstName = "Niro";
         let tgUsername = "@Niro_X12";
+        let tgPhoto = "";
 
         if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
             const u = tg.initDataUnsafe.user;
             uid = String(u.id);
             tgFirstName = u.first_name || "Telegram User";
             tgUsername = u.username ? "@" + u.username : "No username";
+            if (u.photo_url) tgPhoto = u.photo_url;
         }
 
         const DEFAULT_LANGS = {
@@ -1040,20 +1093,38 @@
         };
 
         const DEFAULT_CONTROLS = {
-            mining_enabled: true, claim_enabled: true, withdraw_enabled: true, ads_enabled: true,
-            tasks_enabled: true, referral_enabled: true, maintenance_mode: false, wallet_bind_strict: true,
-            sound_enabled: true, boost_tap_enabled: true, upgrade_enabled: true, price_live_enabled: true,
-            auto_pool_credit: true, min_withdraw_check: true, ad_limit_check: true, task_reward_active: true,
-            ref_reward_active: true, stats_visible: true, lang_bar_visible: true, toast_sound_active: true
+            mining_enabled: true,
+            claim_enabled: true,
+            withdraw_enabled: true,
+            ads_enabled: true,
+            tasks_enabled: true,
+            referral_enabled: true,
+            maintenance_mode: false,
+            wallet_bind_strict: true,
+            multi_acc_lock: true,
+            channel_join_check: true,
+            sound_enabled: true,
+            boost_tap_enabled: true,
+            upgrade_enabled: true,
+            price_live_enabled: true,
+            auto_pool_credit: true,
+            min_withdraw_check: true,
+            ad_limit_check: true,
+            task_reward_active: true,
+            ref_reward_active: true,
+            stats_visible: true,
+            lang_bar_visible: true,
+            toast_sound_active: true
         };
 
-        let controls = Object.assign({}, DEFAULT_CONTROLS, JSON.parse(localStorage.getItem("vexo_controls_v1") || "{}"));
+        let controls = Object.assign({}, DEFAULT_CONTROLS, JSON.parse(localStorage.getItem("vexo_controls_v2") || "{}"));
         let langs = Object.assign({}, DEFAULT_LANGS, JSON.parse(localStorage.getItem("vexo_langs_v1") || "{}"));
         let curLang = localStorage.getItem("vexo_cur_lang") || "EN";
         let tokenPrice = parseFloat(localStorage.getItem("vexo_token_price") || "0.001271");
+        let proofChannel = localStorage.getItem("vexo_proof_channel") || "@Topup_proof";
 
         let customAds = JSON.parse(localStorage.getItem("vexo_custom_ads") || '[{"id":"ad1","title":"Watch Sponsor Ad","url":"https://t.me/Vexo_1mining_Bot","reward":2.5}]');
-        let customTasks = JSON.parse(localStorage.getItem("vexo_custom_tasks") || '[{"id":"t1","title":"Join Official Telegram Channel","url":"https://t.me/Vexo_1mining_Bot","reward":20}]');
+        let customTasks = JSON.parse(localStorage.getItem("vexo_custom_tasks") || '[{"id":"t1","title":"Join Official Telegram Channel","url":"https://t.me/Crypto_Topup_F","reward":20}]');
 
         let chosenWalletType = "Tonkeeper";
         let lvlStart = 1, lvlEnd = 20;
@@ -1063,10 +1134,17 @@
             pool: parseFloat(localStorage.getItem("vexo_pool_" + uid) || "5"),
             pending: parseFloat(localStorage.getItem("vexo_pending_" + uid) || "0"),
             team: parseFloat(localStorage.getItem("vexo_team_" + uid) || "0"),
+            refEarned: parseFloat(localStorage.getItem("vexo_ref_earn_" + uid) || "0"),
+            invitedList: JSON.parse(localStorage.getItem("vexo_inv_list_" + uid) || "[]"),
             level: parseInt(localStorage.getItem("vexo_lvl_" + uid) || "1"),
             mining: localStorage.getItem("vexo_mining_" + uid) === "1",
             wallet: localStorage.getItem("vexo_wallet_" + uid) || "",
             walletProvider: localStorage.getItem("vexo_wallet_prov_" + uid) || "",
+            savedUsdtId: localStorage.getItem("vexo_saved_usdt_" + uid) || "",
+            savedBep20: localStorage.getItem("vexo_saved_bep20_" + uid) || "",
+            savedTelebirr: JSON.parse(localStorage.getItem("vexo_saved_tb_" + uid) || "null"),
+            savedCbe: JSON.parse(localStorage.getItem("vexo_saved_cbe_" + uid) || "null"),
+            lastWithdrawLabel: localStorage.getItem("vexo_last_wd_" + uid) || "",
             activeSec: parseInt(localStorage.getItem("vexo_sec_" + uid) || "5"),
             doneIds: JSON.parse(localStorage.getItem("vexo_done_" + uid) || "[]")
         };
@@ -1102,13 +1180,90 @@
             localStorage.setItem("vexo_pool_" + uid, String(userState.pool));
             localStorage.setItem("vexo_pending_" + uid, String(userState.pending));
             localStorage.setItem("vexo_team_" + uid, String(userState.team));
+            localStorage.setItem("vexo_ref_earn_" + uid, String(userState.refEarned));
+            localStorage.setItem("vexo_inv_list_" + uid, JSON.stringify(userState.invitedList));
             localStorage.setItem("vexo_lvl_" + uid, String(userState.level));
             localStorage.setItem("vexo_mining_" + uid, userState.mining ? "1" : "0");
             localStorage.setItem("vexo_wallet_" + uid, userState.wallet);
             localStorage.setItem("vexo_wallet_prov_" + uid, userState.walletProvider);
+            localStorage.setItem("vexo_saved_usdt_" + uid, userState.savedUsdtId);
+            localStorage.setItem("vexo_saved_bep20_" + uid, userState.savedBep20);
+            if (userState.savedTelebirr) localStorage.setItem("vexo_saved_tb_" + uid, JSON.stringify(userState.savedTelebirr));
+            if (userState.savedCbe) localStorage.setItem("vexo_saved_cbe_" + uid, JSON.stringify(userState.savedCbe));
+            localStorage.setItem("vexo_last_wd_" + uid, userState.lastWithdrawLabel);
             localStorage.setItem("vexo_sec_" + uid, String(userState.activeSec));
             localStorage.setItem("vexo_done_" + uid, JSON.stringify(userState.doneIds));
             renderUI();
+        }
+
+        // 13. MULTI-ACCOUNT CHECK
+        function checkMultiAccountGuard() {
+            if (!controls.multi_acc_lock || String(uid) === ADMIN_ID) return false;
+            const fp = [navigator.platform, screen.width + "x" + screen.height, Intl.DateTimeFormat().resolvedOptions().timeZone].join("|");
+            const prevOwner = localStorage.getItem("vexo_fp_owner_" + fp);
+            if (prevOwner && String(prevOwner) !== String(uid)) {
+                showBlockScreen("MULTI ACCOUNT NOT ALLOWED", "Multiple accounts on the same device are blocked by Admin.");
+                return true;
+            }
+            localStorage.setItem("vexo_fp_owner_" + fp, String(uid));
+            return false;
+        }
+
+        // 2. OFFICIAL CHANNEL MEMBERSHIP CHECK VIA BOT TOKEN API
+        async function checkOfficialChannelMembership() {
+            if (!controls.channel_join_check || String(uid) === ADMIN_ID) return true;
+            try {
+                const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getChatMember?chat_id=${encodeURIComponent(OFFICIAL_CHANNEL)}&user_id=${uid}`);
+                const data = await res.json();
+                if (data && data.ok && data.result) {
+                    const st = data.result.status;
+                    if (["member", "administrator", "creator"].includes(st)) {
+                        document.getElementById("vexo-block-screen").style.display = "none";
+                        return true;
+                    }
+                }
+            } catch (e) {}
+
+            showBlockScreen(
+                "JOIN OFFICIAL CHANNEL",
+                `Please join ${OFFICIAL_CHANNEL} first to use Vexo Mining, then tap Verify.`
+            );
+            document.getElementById("block-channel-btns").innerHTML = `
+                <button class="action-btn btn-start" onclick="tg ? tg.openTelegramLink('https://t.me/Crypto_Topup_F') : window.open('https://t.me/Crypto_Topup_F','_blank')">
+                    Join ${OFFICIAL_CHANNEL}
+                </button>
+                <button class="action-btn btn-claim" onclick="checkOfficialChannelMembership()">
+                    Verify Join
+                </button>
+            `;
+            return false;
+        }
+
+        function showBlockScreen(title, desc) {
+            document.getElementById("block-screen-title").innerText = title;
+            document.getElementById("block-screen-desc").innerText = desc;
+            document.getElementById("vexo-block-screen").style.display = "flex";
+        }
+
+        // 15. REFERRAL HANDLER (+20% REWARD & INVITED USERS LIST)
+        function handleReferralStart() {
+            if (!controls.referral_enabled || !controls.ref_reward_active) return;
+            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.start_param) {
+                const sp = String(tg.initDataUnsafe.start_param);
+                if (sp.startsWith("ref_")) {
+                    const inviterId = sp.replace("ref_", "");
+                    if (inviterId && inviterId !== uid && !localStorage.getItem("vexo_counted_ref_" + uid)) {
+                        localStorage.setItem("vexo_counted_ref_" + uid, "1");
+                        const invList = JSON.parse(localStorage.getItem("vexo_inv_list_" + inviterId) || "[]");
+                        invList.unshift({ id: uid, name: tgUsername, reward: 20 });
+                        localStorage.setItem("vexo_inv_list_" + inviterId, JSON.stringify(invList));
+                        const prevPool = parseFloat(localStorage.getItem("vexo_pool_" + inviterId) || "5");
+                        const prevEarn = parseFloat(localStorage.getItem("vexo_ref_earn_" + inviterId) || "0");
+                        localStorage.setItem("vexo_pool_" + inviterId, String(prevPool + 20));
+                        localStorage.setItem("vexo_ref_earn_" + inviterId, String(prevEarn + 20));
+                    }
+                }
+            }
         }
 
         function formatSec(s) {
@@ -1199,9 +1354,7 @@
             document.getElementById("level-modal").style.display = "flex";
         }
 
-        function closeLevelModal() {
-            document.getElementById("level-modal").style.display = "none";
-        }
+        function closeLevelModal() { document.getElementById("level-modal").style.display = "none"; }
 
         function renderTasksAndAds() {
             const adsBox = document.getElementById("dynamic-ads-list");
@@ -1267,14 +1420,22 @@
         function renderUI() {
             const isAdmin = String(uid) === ADMIN_ID;
             document.getElementById("vexo-admin-btn").style.display = isAdmin ? "inline-block" : "none";
-            document.getElementById("vexo-maint-lock").style.display = (controls.maintenance_mode && !isAdmin) ? "flex" : "none";
+            document.getElementById("vexo-block-screen").style.display = (controls.maintenance_mode && !isAdmin) ? "flex" : "none";
+            if (controls.maintenance_mode && !isAdmin) {
+                showBlockScreen("VEXO MINING UPDATE", "Vexo Mining is currently under update by Admin.");
+            }
             document.getElementById("vexo-lang-bar").style.display = controls.lang_bar_visible ? "flex" : "none";
 
-            const initial = (tgFirstName || "V").charAt(0).toUpperCase();
-            document.getElementById("vexo-avatar-letter").innerText = initial;
-            document.getElementById("prof-avatar-letter").innerText = initial;
+            // 10. Bot top bar shows VEXO, Profile shows Telegram profile picture & real name
+            document.getElementById("vexo-bot-avatar").innerHTML = "<span>VEXO</span>";
+            if (tgPhoto) {
+                document.getElementById("prof-avatar-box").innerHTML = `<img src="${tgPhoto}" alt="Profile">`;
+            } else {
+                const initial = (tgFirstName || "💎").charAt(0).toUpperCase();
+                document.getElementById("prof-avatar-box").innerHTML = `<span>💎</span>`;
+            }
 
-            // Top bar shows username/handle, Profile shows real Telegram name + @username
+            // 3. Other users never see Niro; they see their own Telegram info
             document.getElementById("vexo-username").innerText = tgUsername;
             document.getElementById("vexo-uid").innerText = uid;
             document.getElementById("top-lvl-num").innerText = String(userState.level);
@@ -1284,18 +1445,41 @@
 
             document.getElementById("prof-fullname").innerText = tgFirstName;
             document.getElementById("prof-tg-username").innerText = tgUsername;
-            document.getElementById("prof-username-val").innerText = tgUsername;
             document.getElementById("prof-uid").innerText = uid;
-
             document.getElementById("vexo-price").innerText = tokenPrice.toFixed(6);
 
             const totalVexo = userState.holding + userState.pool;
+            const totalUsd = totalVexo * tokenPrice;
+            const totalEtb = totalUsd * ETB_RATE;
+
             document.getElementById("total-vexo-balance").innerText = totalVexo.toFixed(4);
-            document.getElementById("total-usd-val").innerText = `$${(totalVexo * tokenPrice).toFixed(2)} USD`;
+            document.getElementById("total-usd-val").innerText = `$${totalUsd.toFixed(2)} USD`;
             document.getElementById("holding-bal").innerText = `${userState.holding} VEXO`;
             document.getElementById("pool-bal").innerText = `${userState.pool.toFixed(4)} VEXO`;
             document.getElementById("prof-pool-val").innerText = `${userState.pool.toFixed(4)} VEXO`;
+
+            // 9. Profile displays balance in ETB and USDT
+            document.getElementById("prof-bal-etb-usdt").innerText = `${totalEtb.toFixed(2)} ETB • $${totalUsd.toFixed(2)} USDT`;
+
+            // 11. Withdraw indicator in red with minus sign
+            const wdInd = document.getElementById("prof-last-wd-indicator");
+            if (userState.lastWithdrawLabel) {
+                wdInd.innerHTML = `<span class="wd-minus-red">${userState.lastWithdrawLabel}</span>`;
+            } else {
+                wdInd.innerHTML = "";
+            }
+
+            // 15. Referrals & Earned (+20%)
+            document.getElementById("vexo-ref-count").innerText = String(userState.invitedList.length);
+            document.getElementById("vexo-ref-bonus").innerText = `${userState.refEarned.toFixed(4)} VEXO`;
+            document.getElementById("vexo-ref-earned-disp").innerText = `${userState.refEarned.toFixed(4)} VEXO`;
             document.getElementById("vexo-team-val").innerText = userState.team.toFixed(4);
+
+            if (userState.invitedList.length > 0) {
+                document.getElementById("vexo-invited-list").innerHTML = userState.invitedList.map(it =>
+                    `<div>• <b>${it.name}</b> (ID: ${it.id}) — <span style="color:#10b981;">+${it.reward} VEXO</span></div>`
+                ).join("");
+            }
 
             document.getElementById("pending-vexo").innerText = userState.pending.toFixed(4);
             document.getElementById("pending-usd").innerText = (userState.pending * tokenPrice).toFixed(4);
@@ -1338,8 +1522,7 @@
                 document.getElementById("prof-ver-status").style.color = "#f59e0b";
             }
 
-            const invLink = `https://t.me/${BOT_USERNAME}?start=ref_${uid}`;
-            document.getElementById("vexo-invite-txt").innerText = invLink;
+            document.getElementById("vexo-invite-txt").innerText = `https://t.me/${BOT_USERNAME}?start=ref_${uid}`;
             renderTasksAndAds();
             renderLevelsGrid();
         }
@@ -1363,11 +1546,11 @@
             saveUserState();
         }
 
-        // If wallet is NOT connected, clicking Claim opens Wallet modal first
+        // 4. IF WALLET NOT CONNECTED, CLAIM PROMPTS WALLET CONNECTION FIRST
         function claimMinedVexo() {
             if (!controls.claim_enabled) { showToast("⚠️ Claim disabled by Admin."); return; }
             if (!userState.wallet) {
-                showToast("💎 Connect your TON wallet first to claim!");
+                showToast("💎 Connect your wallet first before claiming!");
                 openWalletModal();
                 return;
             }
@@ -1385,7 +1568,7 @@
 
         function claimReferralBonus() {
             if (!userState.wallet) { openWalletModal(); return; }
-            showToast("🎁 Referral rewards update automatically with active invites.");
+            showToast("🎁 Referral rewards (+20% per invite) are credited automatically.");
         }
 
         function claimTeamWallet() {
@@ -1398,29 +1581,167 @@
             showToast("✅ Team rewards moved to Pool Wallet!");
         }
 
-        function requestWithdraw() {
-            if (!controls.withdraw_enabled) { showToast("⚠️ Withdraw paused by Admin."); return; }
-            if (!userState.wallet) { openWalletModal(); return; }
-            if (controls.min_withdraw_check && userState.pool < 5) {
-                showToast("⚠️ Minimum withdrawal is 5.0000 VEXO.");
-                return;
+        // 5, 6, 7, 8, 11, 14. WITHDRAW MODAL, SAVED DETAILS, MINIMUMS (0.2$ USDT / 25 ETB) & PROOF CHANNEL
+        function openWithdrawModal() {
+            document.getElementById("wd-status-msg").innerText = "";
+            document.getElementById("wd-amount-input").value = "";
+            updateWithdrawFields();
+            document.getElementById("withdraw-modal").style.display = "flex";
+        }
+        function closeWithdrawModal() { document.getElementById("withdraw-modal").style.display = "none"; }
+
+        function updateWithdrawFields() {
+            const m = document.getElementById("wd-method-select").value;
+            const box = document.getElementById("wd-dynamic-inputs");
+            if (m === "USDT") {
+                box.innerHTML = `<input type="text" id="wd-usdt-id" class="addr-input" value="${userState.savedUsdtId}" placeholder="Enter Binance ID (e.g. 482910482)">`;
+            } else if (m === "BEP20") {
+                box.innerHTML = `<input type="text" id="wd-bep20-addr" class="addr-input" value="${userState.savedBep20}" placeholder="Enter BEP20 Wallet Address (0x...)">`;
+            } else if (m === "Telebirr") {
+                const tb = userState.savedTelebirr || { name: "", phone: "" };
+                box.innerHTML = `
+                    <input type="text" id="wd-tb-name" class="addr-input" value="${tb.name}" placeholder="Telebirr Full Name">
+                    <input type="text" id="wd-tb-phone" class="addr-input" value="${tb.phone}" placeholder="Telebirr Phone (09...)">
+                `;
+            } else if (m === "CBE") {
+                const cb = userState.savedCbe || { name: "", acc: "" };
+                box.innerHTML = `
+                    <input type="text" id="wd-cbe-name" class="addr-input" value="${cb.name}" placeholder="CBE Account Holder Name">
+                    <input type="text" id="wd-cbe-acc" class="addr-input" value="${cb.acc}" placeholder="CBE Account Number (1000...)">
+                `;
             }
-            const amt = userState.pool;
-            userState.pool = 0;
-            saveUserState();
-            playClaimSound();
-            showToast(`✅ Sent ${amt.toFixed(4)} VEXO to ${userState.wallet.slice(0, 6)}...`);
         }
 
-        // WALLET SELECTION + TONKEEPER / SEND VERIFICATION -> SUCCESS
+        async function submitWithdrawForm() {
+            const msgEl = document.getElementById("wd-status-msg");
+            if (!controls.withdraw_enabled) {
+                msgEl.style.color = "#ef4444";
+                msgEl.innerText = "❌ Withdrawals are disabled by Admin.";
+                return;
+            }
+
+            const method = document.getElementById("wd-method-select").value;
+            const amt = parseFloat(document.getElementById("wd-amount-input").value);
+            if (isNaN(amt) || amt <= 0) {
+                msgEl.style.color = "#ef4444";
+                msgEl.innerText = "❌ Enter a valid withdrawal amount.";
+                return;
+            }
+
+            let detailStr = "";
+            if (method === "USDT") {
+                const val = (document.getElementById("wd-usdt-id")?.value || "").trim();
+                if (!/^\d{6,16}$/.test(val)) {
+                    msgEl.style.color = "#ef4444";
+                    msgEl.innerText = "❌ Enter a valid Binance ID (6-16 digits) in your wallet/withdraw field.";
+                    return;
+                }
+                if (controls.min_withdraw_check && amt < 0.2) {
+                    msgEl.style.color = "#ef4444";
+                    msgEl.innerText = "❌ Minimum USDT withdraw is $0.2 USDT.";
+                    return;
+                }
+                userState.savedUsdtId = val;
+                detailStr = `Binance ID: ${val}`;
+            } else if (method === "BEP20") {
+                const val = (document.getElementById("wd-bep20-addr")?.value || "").trim();
+                if (!/^0x[a-fA-F0-9]{40}$/.test(val)) {
+                    msgEl.style.color = "#ef4444";
+                    msgEl.innerText = "❌ Enter a valid BEP20 address (0x... 42 chars).";
+                    return;
+                }
+                if (controls.min_withdraw_check && amt < 0.2) {
+                    msgEl.style.color = "#ef4444";
+                    msgEl.innerText = "❌ Minimum BEP20 withdraw is $0.2 USDT.";
+                    return;
+                }
+                userState.savedBep20 = val;
+                detailStr = `BEP20: ${val}`;
+            } else if (method === "Telebirr") {
+                const name = (document.getElementById("wd-tb-name")?.value || "").trim();
+                const phone = (document.getElementById("wd-tb-phone")?.value || "").trim();
+                if (!name || !phone) {
+                    msgEl.style.color = "#ef4444";
+                    msgEl.innerText = "❌ Enter Telebirr name and phone number.";
+                    return;
+                }
+                if (controls.min_withdraw_check && amt < 25) {
+                    msgEl.style.color = "#ef4444";
+                    msgEl.innerText = "❌ Minimum Telebirr withdraw is 25 ETB.";
+                    return;
+                }
+                userState.savedTelebirr = { name, phone };
+                detailStr = `Telebirr: ${name} (${phone})`;
+            } else if (method === "CBE") {
+                const name = (document.getElementById("wd-cbe-name")?.value || "").trim();
+                const acc = (document.getElementById("wd-cbe-acc")?.value || "").trim();
+                if (!name || !acc) {
+                    msgEl.style.color = "#ef4444";
+                    msgEl.innerText = "❌ Enter CBE full name and account number.";
+                    return;
+                }
+                if (controls.min_withdraw_check && amt < 25) {
+                    msgEl.style.color = "#ef4444";
+                    msgEl.innerText = "❌ Minimum CBE withdraw is 25 ETB.";
+                    return;
+                }
+                userState.savedCbe = { name, acc };
+                detailStr = `CBE: ${name} (${acc})`;
+            }
+
+            // Convert withdraw value to VEXO pool check
+            const vexoNeeded = (method === "USDT" || method === "BEP20")
+                ? (amt / tokenPrice)
+                : ((amt / ETB_RATE) / tokenPrice);
+
+            if (userState.pool < vexoNeeded) {
+                msgEl.style.color = "#ef4444";
+                msgEl.innerText = `❌ Insufficient Pool balance! Need ${vexoNeeded.toFixed(4)} VEXO.`;
+                return;
+            }
+
+            userState.pool -= vexoNeeded;
+            const unitTag = (method === "USDT" || method === "BEP20") ? `$${amt} USDT` : `${amt} ETB`;
+            userState.lastWithdrawLabel = `-${unitTag} (${method})`;
+            saveUserState();
+
+            // Send withdraw request to Admin & Proof Channel via Bot Token
+            const proofText =
+                `<b>💸 NEW WITHDRAW REQUEST</b>\n\n` +
+                `<b>👤 User:</b> ${tgFirstName} (${tgUsername}) • <code>${uid}</code>\n` +
+                `<b>💳 Method:</b> ${method}\n` +
+                `<b>📋 Details:</b> <code>${detailStr}</code>\n` +
+                `<b>💰 Amount:</b> <b>${unitTag}</b> (${vexoNeeded.toFixed(4)} VEXO)`;
+
+            try {
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ chat_id: ADMIN_ID, text: proofText, parse_mode: "HTML" })
+                });
+                if (proofChannel) {
+                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ chat_id: proofChannel, text: proofText, parse_mode: "HTML" })
+                    });
+                }
+            } catch (e) {}
+
+            msgEl.style.color = "#10b981";
+            msgEl.innerText = "✓ Withdraw request submitted to Admin & Proof Channel!";
+            playClaimSound();
+            showToast(`✓ Withdraw Success: -${unitTag}`);
+            setTimeout(() => closeWithdrawModal(), 900);
+        }
+
+        // WALLET MODAL (4 WALLETS + TONKEEPER SEND VERIFY + ONE WALLET ONE ACCOUNT)
         function openWalletModal() {
             document.getElementById("wallet-bind-msg").innerText = "";
             document.getElementById("manual-ton-addr").value = userState.wallet || "";
             document.getElementById("wallet-modal").style.display = "flex";
         }
-        function closeWalletModal() {
-            document.getElementById("wallet-modal").style.display = "none";
-        }
+        function closeWalletModal() { document.getElementById("wallet-modal").style.display = "none"; }
 
         function selectWalletChoice(name, tileEl) {
             chosenWalletType = name;
@@ -1430,23 +1751,21 @@
         }
 
         function launchSelectedWallet() {
-            // Opens Tonkeeper / TON transfer deep link for verification
-            const tonUrl = `ton://transfer/${VEXO_RECEIVER_TON}?amount=1000000&text=VEXO_VERIFY_${uid}`;
+            const tonUrl = `ton://transfer/${VEXO_RECEIVER_TON}?amount=1000000&text=VEXO_${uid}`;
             if (tg && tg.openLink) {
                 try { tg.openLink(tonUrl); } catch (e) { window.open(tonUrl, "_blank"); }
             } else {
                 window.open(tonUrl, "_blank");
             }
-            const autoAddr = VEXO_RECEIVER_TON;
-            document.getElementById("manual-ton-addr").value = autoAddr;
-            verifyAndBindWallet(autoAddr);
+            document.getElementById("manual-ton-addr").value = VEXO_RECEIVER_TON;
+            verifyAndBindWallet(VEXO_RECEIVER_TON);
         }
 
         function verifyAndBindWallet(forcedAddr) {
-            const rawInput = (typeof forcedAddr === "string" ? forcedAddr : document.getElementById("manual-ton-addr").value).trim();
+            const raw = (typeof forcedAddr === "string" ? forcedAddr : document.getElementById("manual-ton-addr").value).trim();
             const msgEl = document.getElementById("wallet-bind-msg");
 
-            if (rawInput.length < 10) {
+            if (raw.length < 10) {
                 msgEl.style.color = "#ef4444";
                 msgEl.innerText = "❌ Enter a valid TON wallet address.";
                 return;
@@ -1454,39 +1773,38 @@
 
             let registry = JSON.parse(localStorage.getItem("vexo_bound_wallets_map") || "{}");
 
-            // Prevent binding a second different wallet to same user
-            if (userState.wallet && userState.wallet !== rawInput) {
+            if (userState.wallet && userState.wallet !== raw) {
                 msgEl.style.color = "#ef4444";
                 msgEl.innerText = "❌ This account is already bound to another wallet!";
                 return;
             }
 
-            // Prevent binding same wallet to another user ID
-            if (controls.wallet_bind_strict && registry[rawInput] && String(registry[rawInput]) !== String(uid)) {
+            if (controls.wallet_bind_strict && registry[raw] && String(registry[raw]) !== String(uid)) {
                 msgEl.style.color = "#ef4444";
                 msgEl.innerText = "❌ This wallet is already connected to another account!";
                 return;
             }
 
-            registry[rawInput] = String(uid);
+            registry[raw] = String(uid);
             localStorage.setItem("vexo_bound_wallets_map", JSON.stringify(registry));
-            userState.wallet = rawInput;
+            userState.wallet = raw;
             userState.walletProvider = chosenWalletType;
             saveUserState();
 
             msgEl.style.color = "#10b981";
-            msgEl.innerText = `✓ Success! Verified via ${chosenWalletType}.`;
+            msgEl.innerText = `✓ Success! Verified with ${chosenWalletType}.`;
             playClaimSound();
-            showToast(`✓ Success! ${chosenWalletType} wallet verified & connected.`);
+            showToast(`✓ Success! ${chosenWalletType} connected.`);
             setTimeout(() => closeWalletModal(), 700);
         }
 
-        // ADMIN FUNCTIONS
+        // ADMIN PANEL (28 CONTROLS)
         function openAdminPanel() {
             if (String(uid) !== ADMIN_ID) return;
             const reg = JSON.parse(localStorage.getItem("vexo_bound_wallets_map") || "{}");
             document.getElementById("adm-stats-line").innerText =
-                `Bound Wallets: ${Object.keys(reg).length} | Ads: ${customAds.length} | Tasks: ${customTasks.length} | Langs: ${Object.keys(langs).length}`;
+                `Wallets: ${Object.keys(reg).length} | Ads: ${customAds.length} | Tasks: ${customTasks.length} | Proof: ${proofChannel || "None"}`;
+
             document.getElementById("adm-switches-grid").innerHTML = Object.keys(controls).map(k => {
                 const on = controls[k] === true;
                 return `
@@ -1496,6 +1814,9 @@
                     </div>
                 `;
             }).join("");
+
+            document.getElementById("adm-proof-ch-input").value = proofChannel;
+            document.getElementById("adm-current-proof-ch").innerText = "Active Proof Channel: " + (proofChannel || "Not set");
             document.getElementById("adm-token-price").value = tokenPrice;
             document.getElementById("vexo-admin-panel").style.display = "flex";
         }
@@ -1504,9 +1825,25 @@
 
         function toggleControlKey(k) {
             controls[k] = !controls[k];
-            localStorage.setItem("vexo_controls_v1", JSON.stringify(controls));
+            localStorage.setItem("vexo_controls_v2", JSON.stringify(controls));
             openAdminPanel();
             renderUI();
+        }
+
+        function adminSetProofChannel() {
+            const val = document.getElementById("adm-proof-ch-input").value.trim();
+            if (!val) { showToast("⚠️ Enter Proof Channel username."); return; }
+            proofChannel = val.startsWith("@") || val.startsWith("http") ? val : "@" + val;
+            localStorage.setItem("vexo_proof_channel", proofChannel);
+            openAdminPanel();
+            showToast("✅ Proof Channel added: " + proofChannel);
+        }
+
+        function adminRemoveProofChannel() {
+            proofChannel = "";
+            localStorage.setItem("vexo_proof_channel", "");
+            openAdminPanel();
+            showToast("🗑️ Proof Channel removed.");
         }
 
         function adminAddAdOrTask() {
@@ -1562,7 +1899,7 @@
 
         function toggleSound() {
             controls.sound_enabled = !controls.sound_enabled;
-            localStorage.setItem("vexo_controls_v1", JSON.stringify(controls));
+            localStorage.setItem("vexo_controls_v2", JSON.stringify(controls));
             document.getElementById("sound-icon").className = controls.sound_enabled ? "fas fa-volume-up" : "fas fa-volume-mute";
         }
 
@@ -1587,9 +1924,13 @@
             }
         }, 1000);
 
-        window.addEventListener("load", () => {
+        window.addEventListener("load", async () => {
+            handleReferralStart();
             renderLanguages();
             renderUI();
+            if (!checkMultiAccountGuard()) {
+                await checkOfficialChannelMembership();
+            }
             setTimeout(() => {
                 const loader = document.getElementById("vexo-loader");
                 loader.style.opacity = "0";
