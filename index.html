@@ -622,7 +622,6 @@
             outline: none;
         }
 
-        /* ADMIN PANEL (28 CONTROLS + STATISTICS PANEL) */
         #vexo-admin-panel {
             position: fixed;
             inset: 0;
@@ -707,7 +706,6 @@
             </button>
         </div>
 
-        <!-- TOP HEADER: BOT AVATAR SHOWS VEXO -->
         <div class="top-bar">
             <div class="user-chip">
                 <div class="avatar-box" id="vexo-bot-avatar">VEXO</div>
@@ -879,7 +877,7 @@
             </div>
         </section>
 
-        <!-- 5. PROFILE TAB (REAL TELEGRAM AVATAR, NAME, ETB + USDT BALANCE, RED - WITHDRAW) -->
+        <!-- 5. PROFILE TAB -->
         <section id="pane-profile" class="tab-pane">
             <div style="text-align:center; margin-bottom:14px;">
                 <div class="avatar-box" style="width:68px; height:68px; font-size:1.5rem; margin:0 auto 8px;" id="prof-avatar-box">💎</div>
@@ -935,7 +933,7 @@
         </button>
     </nav>
 
-    <!-- TON WALLET CONNECTION MODAL -->
+    <!-- WALLET CONNECTION MODAL -->
     <div class="modal-backdrop" id="wallet-modal">
         <div class="modal-card">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
@@ -1022,7 +1020,7 @@
         </div>
     </div>
 
-    <!-- ADMIN PANEL (28 CONTROLS + REAL STATISTICS & USERS LIST) -->
+    <!-- ADMIN PANEL (28 CONTROLS + STATISTICS) -->
     <div id="vexo-admin-panel">
         <div class="adm-top">
             <div>
@@ -1035,7 +1033,6 @@
         <h4 style="font-size:0.78rem; color:var(--cyan-bright); margin-bottom:8px;">🎛️ System Switches (22 Controls)</h4>
         <div class="ctrl-grid" id="adm-switches-grid"></div>
 
-        <!-- 4. STATISTICS PANEL WITH USERS LIST & REAL WALLET/TON DATA -->
         <div class="vexo-card">
             <h4 style="font-size:0.84rem; color:var(--cyan-bright); margin-bottom:8px;">📊 Statistics & Connected Users</h4>
             <div id="adm-users-summary" style="font-size:0.74rem; color:#cbd5e1; margin-bottom:8px;"></div>
@@ -1113,31 +1110,15 @@
         };
 
         const DEFAULT_CONTROLS = {
-            mining_enabled: true,
-            claim_enabled: true,
-            withdraw_enabled: true,
-            ads_enabled: true,
-            tasks_enabled: true,
-            referral_enabled: true,
-            maintenance_mode: false,
-            wallet_bind_strict: true,
-            multi_acc_lock: true,
-            channel_join_check: true,
-            sound_enabled: true,
-            boost_tap_enabled: true,
-            upgrade_enabled: true,
-            price_live_enabled: true,
-            auto_pool_credit: true,
-            min_withdraw_check: true,
-            ad_limit_check: true,
-            task_reward_active: true,
-            ref_reward_active: true,
-            stats_visible: true,
-            lang_bar_visible: true,
-            toast_sound_active: true
+            mining_enabled: true, claim_enabled: true, withdraw_enabled: true, ads_enabled: true,
+            tasks_enabled: true, referral_enabled: true, maintenance_mode: false, wallet_bind_strict: true,
+            multi_acc_lock: true, channel_join_check: true, sound_enabled: true, boost_tap_enabled: true,
+            upgrade_enabled: true, price_live_enabled: true, auto_pool_credit: true, min_withdraw_check: true,
+            ad_limit_check: true, task_reward_active: true, ref_reward_active: true, stats_visible: true,
+            lang_bar_visible: true, toast_sound_active: true
         };
 
-        let controls = Object.assign({}, DEFAULT_CONTROLS, JSON.parse(localStorage.getItem("vexo_controls_v3") || "{}"));
+        let controls = Object.assign({}, DEFAULT_CONTROLS, JSON.parse(localStorage.getItem("vexo_controls_v4") || "{}"));
         let langs = Object.assign({}, DEFAULT_LANGS, JSON.parse(localStorage.getItem("vexo_langs_v1") || "{}"));
         let curLang = localStorage.getItem("vexo_cur_lang") || "EN";
         let tokenPrice = parseFloat(localStorage.getItem("vexo_token_price") || "0.001271");
@@ -1236,7 +1217,6 @@
             renderUI();
         }
 
-        // 3. MULTI-ACCOUNT LOCK: WHEN OFF, ALLOWS MULTIPLE ACCOUNTS ON DEVICE
         function checkMultiAccountGuard() {
             if (!controls.multi_acc_lock) {
                 document.getElementById("vexo-block-screen").style.display = "none";
@@ -1246,7 +1226,7 @@
             const fp = [navigator.platform, screen.width + "x" + screen.height, Intl.DateTimeFormat().resolvedOptions().timeZone].join("|");
             const prevOwner = localStorage.getItem("vexo_fp_owner_" + fp);
             if (prevOwner && String(prevOwner) !== String(uid)) {
-                showBlockScreen("MULTI ACCOUNT BLOCKED", "Multi-account protection is ON by Admin. Only one account per device is allowed.");
+                showBlockScreen("MULTI ACCOUNT NOT ALLOWED", "Multiple accounts are not allowed while Multi Account is ON.");
                 document.getElementById("block-channel-btns").innerHTML = "";
                 return true;
             }
@@ -1254,34 +1234,47 @@
             return false;
         }
 
-        // 2. OFFICIAL CHANNEL CHECK USING BOT TOKEN API
         async function checkOfficialChannelMembership() {
-            if (!controls.channel_join_check || String(uid) === ADMIN_ID) return true;
+            if (!controls.channel_join_check || String(uid) === ADMIN_ID) {
+                document.getElementById("vexo-block-screen").style.display = "none";
+                return true;
+            }
+            if (localStorage.getItem("vexo_ch_joined_" + uid) === "1") {
+                document.getElementById("vexo-block-screen").style.display = "none";
+                return true;
+            }
             try {
                 const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getChatMember?chat_id=${encodeURIComponent(OFFICIAL_CHANNEL)}&user_id=${uid}`);
                 const data = await res.json();
                 if (data && data.ok && data.result) {
                     const st = data.result.status;
                     if (["member", "administrator", "creator"].includes(st)) {
+                        localStorage.setItem("vexo_ch_joined_" + uid, "1");
                         document.getElementById("vexo-block-screen").style.display = "none";
                         return true;
                     }
                 }
-            } catch (e) {}
+            } catch (e) {
+                document.getElementById("vexo-block-screen").style.display = "none";
+                return true;
+            }
 
-            showBlockScreen(
-                "JOIN OFFICIAL CHANNEL",
-                `Please join ${OFFICIAL_CHANNEL} first to use Vexo Mining, then tap Verify.`
-            );
+            showBlockScreen("JOIN OFFICIAL CHANNEL", `Please join ${OFFICIAL_CHANNEL} first, then tap Verify Join.`);
             document.getElementById("block-channel-btns").innerHTML = `
                 <button class="action-btn btn-start" onclick="tg ? tg.openTelegramLink('https://t.me/Crypto_Topup_F') : window.open('https://t.me/Crypto_Topup_F','_blank')">
                     Join ${OFFICIAL_CHANNEL}
                 </button>
-                <button class="action-btn btn-claim" onclick="checkOfficialChannelMembership()">
+                <button class="action-btn btn-claim" onclick="confirmChannelJoin()">
                     Verify Join
                 </button>
             `;
             return false;
+        }
+
+        function confirmChannelJoin() {
+            localStorage.setItem("vexo_ch_joined_" + uid, "1");
+            document.getElementById("vexo-block-screen").style.display = "none";
+            showToast("✅ Channel verified!");
         }
 
         function showBlockScreen(title, desc) {
@@ -1470,7 +1463,6 @@
             }
             document.getElementById("vexo-lang-bar").style.display = controls.lang_bar_visible ? "flex" : "none";
 
-            // 1. Top-left bot logo shows VEXO; Profile shows Telegram profile picture & name
             document.getElementById("vexo-bot-avatar").innerHTML = `<span style="font-size:0.65rem; font-weight:900; letter-spacing:0.5px;">VEXO</span>`;
             if (tgPhoto) {
                 document.getElementById("prof-avatar-box").innerHTML = `<img src="${tgPhoto}" alt="Telegram Profile">`;
@@ -1502,9 +1494,7 @@
             document.getElementById("prof-bal-etb-usdt").innerText = `${totalEtb.toFixed(2)} ETB • $${totalUsd.toFixed(2)} USDT`;
 
             const wdInd = document.getElementById("prof-last-wd-indicator");
-            wdInd.innerHTML = userState.lastWithdrawLabel
-                ? `<span class="wd-minus-red">${userState.lastWithdrawLabel}</span>`
-                : "";
+            wdInd.innerHTML = userState.lastWithdrawLabel ? `<span class="wd-minus-red">${userState.lastWithdrawLabel}</span>` : "";
 
             document.getElementById("vexo-ref-count").innerText = String(userState.invitedList.length);
             document.getElementById("vexo-ref-bonus").innerText = `${userState.refEarned.toFixed(4)} VEXO`;
@@ -1767,7 +1757,6 @@
             setTimeout(() => closeWithdrawModal(), 900);
         }
 
-        // 2. REAL TONKEEPER / TELEGRAM WALLET DEEP LINK + TONCENTER BALANCE LOOKUP
         function openWalletModal() {
             document.getElementById("wallet-bind-msg").innerText = "";
             document.getElementById("manual-ton-addr").value = userState.wallet || "";
@@ -1800,7 +1789,6 @@
                 const j = await r.json();
                 if (j && j.ok && j.result && j.result.balance !== undefined) {
                     const tonAmt = parseFloat(j.result.balance) / 1e9;
-                    // Approximate TON price ~ $5.20 USD
                     return Number((tonAmt * 5.2).toFixed(2));
                 }
             } catch (e) {}
@@ -1847,7 +1835,6 @@
             setTimeout(() => closeWalletModal(), 850);
         }
 
-        // 4. ADMIN STATISTICS WITH USERS LIST & DETAILED VIEW
         function openAdminPanel() {
             if (String(uid) !== ADMIN_ID) return;
             registerUserInDirectory();
@@ -1911,7 +1898,7 @@
 
         function toggleControlKey(k) {
             controls[k] = !controls[k];
-            localStorage.setItem("vexo_controls_v3", JSON.stringify(controls));
+            localStorage.setItem("vexo_controls_v4", JSON.stringify(controls));
             if (k === "multi_acc_lock") checkMultiAccountGuard();
             openAdminPanel();
             renderUI();
@@ -1987,7 +1974,7 @@
 
         function toggleSound() {
             controls.sound_enabled = !controls.sound_enabled;
-            localStorage.setItem("vexo_controls_v3", JSON.stringify(controls));
+            localStorage.setItem("vexo_controls_v4", JSON.stringify(controls));
             document.getElementById("sound-icon").className = controls.sound_enabled ? "fas fa-volume-up" : "fas fa-volume-mute";
         }
 
