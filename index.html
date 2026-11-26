@@ -255,7 +255,13 @@
 
         .assets-block { text-align: center; margin-bottom: 12px; }
         .assets-label { font-size: 0.72rem; letter-spacing: 1px; color: var(--text-muted); font-weight: 700; }
-        .assets-main { font-size: 1.95rem; font-weight: 900; margin: 3px 0 7px; color: #fff; }
+        .assets-main { font-size: 1.95rem; font-weight: 900; margin: 3px 0 5px; color: #fff; }
+        .assets-fiat-sub {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--green);
+            margin-bottom: 8px;
+        }
         .sub-balances { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
         .sub-bal-pill {
             background: var(--card-dark);
@@ -271,6 +277,7 @@
         .pending-reward { text-align: center; margin: 12px 0 8px; }
         .pending-num { font-size: 2rem; font-weight: 900; color: var(--cyan-bright); line-height: 1.1; }
         .pending-usd { font-size: 0.76rem; color: var(--text-muted); margin-top: 2px; }
+        .pending-fiat { font-size: 0.78rem; font-weight: 700; color: var(--green); margin-top: 2px; }
 
         .core-stage {
             position: relative;
@@ -735,7 +742,7 @@
                     <span class="tag-jetton">TON JETTON</span>
                 </div>
                 <div class="live-price">
-                    <i class="fas fa-circle" style="font-size:0.45rem;"></i> CoinGecko: $<span id="vexo-price">0.001271</span>
+                    <i class="fas fa-circle" style="font-size:0.45rem;"></i> CoinGecko: $<span id="vexo-price">0.008500</span> (<span id="vexo-birr-unit">18.23 ETB</span>)
                 </div>
             </div>
 
@@ -754,8 +761,9 @@
             </div>
 
             <div class="assets-block">
-                <div class="assets-label">TOTAL ASSETS (<span id="total-usd-val">$0.02 USD</span>)</div>
+                <div class="assets-label">TOTAL ASSETS (<span id="total-usd-val">$0.13 USD</span>)</div>
                 <div class="assets-main">💎 <span id="total-vexo-balance">15.0000</span> VEXO</div>
+                <div class="assets-fiat-sub" id="assets-etb-usdt-line">≈ 17.21 ETB • $0.1275 USDT</div>
                 <div class="sub-balances">
                     <div class="sub-bal-pill">HOLDING: <b id="holding-bal">10 VEXO</b></div>
                     <div class="sub-bal-pill">POOL: <b id="pool-bal">5.0000 VEXO</b></div>
@@ -765,6 +773,7 @@
             <div class="pending-reward">
                 <div class="pending-num">+<span id="pending-vexo">0.0000</span></div>
                 <div class="pending-usd">≈ $<span id="pending-usd">0.0000</span> USD</div>
+                <div class="pending-fiat" id="pending-etb-usdt-line">≈ 0.00 ETB • $0.0000 USDT</div>
             </div>
 
             <div class="core-stage">
@@ -1121,7 +1130,7 @@
         let controls = Object.assign({}, DEFAULT_CONTROLS, JSON.parse(localStorage.getItem("vexo_controls_v4") || "{}"));
         let langs = Object.assign({}, DEFAULT_LANGS, JSON.parse(localStorage.getItem("vexo_langs_v1") || "{}"));
         let curLang = localStorage.getItem("vexo_cur_lang") || "EN";
-        let tokenPrice = parseFloat(localStorage.getItem("vexo_token_price") || "0.001271");
+        let tokenPrice = parseFloat(localStorage.getItem("vexo_token_price") || "0.008500");
         let proofChannel = localStorage.getItem("vexo_proof_channel") || "@Topup_proof";
 
         let customAds = JSON.parse(localStorage.getItem("vexo_custom_ads") || '[{"id":"ad1","title":"Watch Sponsor Ad","url":"https://t.me/Vexo_1mining_Bot","reward":2.5}]');
@@ -1480,7 +1489,10 @@
             document.getElementById("prof-fullname").innerText = tgFirstName;
             document.getElementById("prof-tg-username").innerText = tgUsername;
             document.getElementById("prof-uid").innerText = uid;
+
+            const unitBirr = (tokenPrice * ETB_RATE).toFixed(2);
             document.getElementById("vexo-price").innerText = tokenPrice.toFixed(6);
+            document.getElementById("vexo-birr-unit").innerText = `${unitBirr} ETB`;
 
             const totalVexo = userState.holding + userState.pool;
             const totalUsd = totalVexo * tokenPrice;
@@ -1488,10 +1500,11 @@
 
             document.getElementById("total-vexo-balance").innerText = totalVexo.toFixed(4);
             document.getElementById("total-usd-val").innerText = `$${totalUsd.toFixed(2)} USD`;
+            document.getElementById("assets-etb-usdt-line").innerText = `≈ ${totalEtb.toFixed(2)} ETB • $${totalUsd.toFixed(4)} USDT`;
             document.getElementById("holding-bal").innerText = `${userState.holding} VEXO`;
             document.getElementById("pool-bal").innerText = `${userState.pool.toFixed(4)} VEXO`;
             document.getElementById("prof-pool-val").innerText = `${userState.pool.toFixed(4)} VEXO`;
-            document.getElementById("prof-bal-etb-usdt").innerText = `${totalEtb.toFixed(2)} ETB • $${totalUsd.toFixed(2)} USDT`;
+            document.getElementById("prof-bal-etb-usdt").innerText = `${totalEtb.toFixed(2)} ETB • $${totalUsd.toFixed(4)} USDT`;
 
             const wdInd = document.getElementById("prof-last-wd-indicator");
             wdInd.innerHTML = userState.lastWithdrawLabel ? `<span class="wd-minus-red">${userState.lastWithdrawLabel}</span>` : "";
@@ -1507,8 +1520,11 @@
                 ).join("");
             }
 
+            const pendUsd = userState.pending * tokenPrice;
+            const pendEtb = pendUsd * ETB_RATE;
             document.getElementById("pending-vexo").innerText = userState.pending.toFixed(4);
-            document.getElementById("pending-usd").innerText = (userState.pending * tokenPrice).toFixed(4);
+            document.getElementById("pending-usd").innerText = `≈ $${pendUsd.toFixed(4)} USD`;
+            document.getElementById("pending-etb-usdt-line").innerText = `≈ ${pendEtb.toFixed(2)} ETB • $${pendUsd.toFixed(4)} USDT`;
             document.getElementById("active-timer-txt").innerText = formatSec(userState.activeSec);
 
             const l = langs[curLang] || DEFAULT_LANGS.EN;
