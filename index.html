@@ -255,7 +255,13 @@
 
         .assets-block { text-align: center; margin-bottom: 12px; }
         .assets-label { font-size: 0.72rem; letter-spacing: 1px; color: var(--text-muted); font-weight: 700; }
-        .assets-main { font-size: 1.95rem; font-weight: 900; margin: 3px 0 7px; color: #fff; }
+        .assets-main { font-size: 1.95rem; font-weight: 900; margin: 3px 0 5px; color: #fff; }
+        .assets-fiat-sub {
+            font-size: 0.76rem;
+            font-weight: 700;
+            color: var(--green);
+            margin-bottom: 8px;
+        }
         .sub-balances { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
         .sub-bal-pill {
             background: var(--card-dark);
@@ -271,6 +277,7 @@
         .pending-reward { text-align: center; margin: 12px 0 8px; }
         .pending-num { font-size: 2rem; font-weight: 900; color: var(--cyan-bright); line-height: 1.1; }
         .pending-usd { font-size: 0.76rem; color: var(--text-muted); margin-top: 2px; }
+        .pending-fiat { font-size: 0.76rem; font-weight: 700; color: var(--green); margin-top: 2px; }
 
         .core-stage {
             position: relative;
@@ -689,8 +696,8 @@
     <div id="vexo-toast"></div>
 
     <div id="vexo-block-screen">
-        <i class="fas fa-shield-alt" style="font-size:2.4rem; color:var(--gold); margin-bottom:12px;"></i>
-        <h2 id="block-screen-title" style="font-weight:900; margin-bottom:8px;">JOIN REQUIRED</h2>
+        <i class="fas fa-shield-alt" style="font-size:2.4rem; color:var(--danger); margin-bottom:12px;"></i>
+        <h2 id="block-screen-title" style="font-weight:900; margin-bottom:8px;">MULTI BAN</h2>
         <p id="block-screen-desc" style="color:var(--text-muted); font-size:0.86rem; max-width:340px; margin-bottom:16px;"></p>
         <div id="block-channel-btns" style="width:100%; max-width:320px;"></div>
     </div>
@@ -735,14 +742,14 @@
                     <span class="tag-jetton">TON JETTON</span>
                 </div>
                 <div class="live-price">
-                    <i class="fas fa-circle" style="font-size:0.45rem;"></i> CoinGecko: $<span id="vexo-price">0.001271</span>
+                    <i class="fas fa-circle" style="font-size:0.45rem;"></i> CoinGecko: $<span id="vexo-price">0.000015</span> (<span id="vexo-birr-unit">0.0020 ETB</span>)
                 </div>
             </div>
 
             <div class="status-row">
                 <span class="status-pill">$0.11 left to Lvl UP</span>
                 <span class="status-pill">● <b id="mining-state-txt">IDLE</b></span>
-                <span class="status-pill">Yield: <b>+0.7 VEXO/day</b></span>
+                <span class="status-pill">Yield: <b>+0.001 VEXO/day</b></span>
             </div>
 
             <div class="wallet-banner" onclick="openWalletModal()">
@@ -754,8 +761,9 @@
             </div>
 
             <div class="assets-block">
-                <div class="assets-label">TOTAL ASSETS (<span id="total-usd-val">$0.02 USD</span>)</div>
+                <div class="assets-label">TOTAL ASSETS (<span id="total-usd-val">$0.0002 USD</span>)</div>
                 <div class="assets-main">💎 <span id="total-vexo-balance">15.0000</span> VEXO</div>
+                <div class="assets-fiat-sub" id="assets-etb-usdt-line">≈ 0.0304 ETB • $0.000225 USDT</div>
                 <div class="sub-balances">
                     <div class="sub-bal-pill">HOLDING: <b id="holding-bal">10 VEXO</b></div>
                     <div class="sub-bal-pill">POOL: <b id="pool-bal">5.0000 VEXO</b></div>
@@ -764,7 +772,8 @@
 
             <div class="pending-reward">
                 <div class="pending-num">+<span id="pending-vexo">0.0000</span></div>
-                <div class="pending-usd">≈ $<span id="pending-usd">0.0000</span> USD</div>
+                <div class="pending-usd">≈ $<span id="pending-usd">0.000000</span> USD</div>
+                <div class="pending-fiat" id="pending-etb-usdt-line">≈ 0.0000 ETB • $0.000000 USDT</div>
             </div>
 
             <div class="core-stage">
@@ -782,9 +791,9 @@
 
             <div class="pkg-bar">
                 <div>
-                    <b style="font-size:0.84rem;">● Package Lvl <span id="bar-lvl-num">1</span> <span style="color:var(--cyan-bright);">+0.05 VEXO/hr</span></b>
+                    <b style="font-size:0.84rem;">● Package Lvl <span id="bar-lvl-num">1</span> <span style="color:var(--cyan-bright);">+0.0001 VEXO/hr</span></b>
                     <div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;">
-                        Speed: 0.20 TH/s • Active: <span id="active-timer-txt">00:00:05</span>
+                        Speed: 0.01 TH/s • Active: <span id="active-timer-txt">00:00:05</span>
                     </div>
                 </div>
                 <button class="claim-mini-btn" id="btn-claim-anytime" onclick="claimMinedVexo()">Claim Anytime</button>
@@ -1057,7 +1066,7 @@
             </select>
             <input type="text" id="adm-item-title" class="addr-input" placeholder="Title">
             <input type="text" id="adm-item-url" class="addr-input" placeholder="URL (https://...)">
-            <input type="number" id="adm-item-reward" class="addr-input" placeholder="Reward VEXO (e.g. 5)">
+            <input type="number" id="adm-item-reward" class="addr-input" placeholder="Reward VEXO (e.g. 0.01)">
             <button class="action-btn btn-start" style="margin-bottom:0; padding:10px;" onclick="adminAddAdOrTask()">+ Add Watch / Task</button>
         </div>
 
@@ -1072,7 +1081,7 @@
         <div class="vexo-card">
             <h4 style="font-size:0.82rem; color:var(--gold); margin-bottom:8px;">💰 Adjust Balance & Token Price</h4>
             <input type="text" id="adm-bal-uid" class="addr-input" placeholder="User ID">
-            <input type="number" id="adm-bal-add" class="addr-input" placeholder="Add VEXO to Pool">
+            <input type="number" step="0.0001" id="adm-bal-add" class="addr-input" placeholder="Add VEXO to Pool">
             <button class="action-btn btn-start" style="margin-bottom:10px; padding:10px;" onclick="adminAddUserBalance()">+ Add VEXO</button>
             <input type="number" step="0.000001" id="adm-token-price" class="addr-input" placeholder="VEXO Price USD">
             <button class="claim-mini-btn" style="width:100%; padding:10px;" onclick="adminSavePrice()">Update Price</button>
@@ -1121,11 +1130,11 @@
         let controls = Object.assign({}, DEFAULT_CONTROLS, JSON.parse(localStorage.getItem("vexo_controls_v4") || "{}"));
         let langs = Object.assign({}, DEFAULT_LANGS, JSON.parse(localStorage.getItem("vexo_langs_v1") || "{}"));
         let curLang = localStorage.getItem("vexo_cur_lang") || "EN";
-        let tokenPrice = parseFloat(localStorage.getItem("vexo_token_price") || "0.001271");
+        let tokenPrice = parseFloat(localStorage.getItem("vexo_token_price") || "0.000015");
         let proofChannel = localStorage.getItem("vexo_proof_channel") || "@Topup_proof";
 
-        let customAds = JSON.parse(localStorage.getItem("vexo_custom_ads") || '[{"id":"ad1","title":"Watch Sponsor Ad","url":"https://t.me/Vexo_1mining_Bot","reward":2.5}]');
-        let customTasks = JSON.parse(localStorage.getItem("vexo_custom_tasks") || '[{"id":"t1","title":"Join Official Telegram Channel","url":"https://t.me/Crypto_Topup_F","reward":20}]');
+        let customAds = JSON.parse(localStorage.getItem("vexo_custom_ads") || '[{"id":"ad1","title":"Watch Sponsor Ad","url":"https://t.me/Vexo_1mining_Bot","reward":0.01}]');
+        let customTasks = JSON.parse(localStorage.getItem("vexo_custom_tasks") || '[{"id":"t1","title":"Join Official Telegram Channel","url":"https://t.me/Crypto_Topup_F","reward":0.05}]');
 
         let chosenWalletType = "Tonkeeper";
         let lvlStart = 1, lvlEnd = 20;
@@ -1217,20 +1226,26 @@
             renderUI();
         }
 
+        // When Multi Account control is OFF, show MULTI BAN board
         function checkMultiAccountGuard() {
-            if (!controls.multi_acc_lock) {
+            if (!controls.multi_acc_lock && String(uid) !== ADMIN_ID) {
+                showBlockScreen("MULTI BAN", "Multi Account is OFF — Multi Ban board active.");
+                document.getElementById("block-channel-btns").innerHTML = "";
+                return true;
+            }
+            if (String(uid) === ADMIN_ID) {
                 document.getElementById("vexo-block-screen").style.display = "none";
                 return false;
             }
-            if (String(uid) === ADMIN_ID) return false;
             const fp = [navigator.platform, screen.width + "x" + screen.height, Intl.DateTimeFormat().resolvedOptions().timeZone].join("|");
             const prevOwner = localStorage.getItem("vexo_fp_owner_" + fp);
             if (prevOwner && String(prevOwner) !== String(uid)) {
-                showBlockScreen("MULTI ACCOUNT NOT ALLOWED", "Multiple accounts are not allowed while Multi Account is ON.");
+                showBlockScreen("MULTI BAN", "Multiple accounts detected on this device.");
                 document.getElementById("block-channel-btns").innerHTML = "";
                 return true;
             }
             localStorage.setItem("vexo_fp_owner_" + fp, String(uid));
+            document.getElementById("vexo-block-screen").style.display = "none";
             return false;
         }
 
@@ -1292,12 +1307,12 @@
                     if (inviterId && inviterId !== uid && !localStorage.getItem("vexo_counted_ref_" + uid)) {
                         localStorage.setItem("vexo_counted_ref_" + uid, "1");
                         const invList = JSON.parse(localStorage.getItem("vexo_inv_list_" + inviterId) || "[]");
-                        invList.unshift({ id: uid, name: tgUsername, reward: 20 });
+                        invList.unshift({ id: uid, name: tgUsername, reward: 0.05 });
                         localStorage.setItem("vexo_inv_list_" + inviterId, JSON.stringify(invList));
                         const prevPool = parseFloat(localStorage.getItem("vexo_pool_" + inviterId) || "5");
                         const prevEarn = parseFloat(localStorage.getItem("vexo_ref_earn_" + inviterId) || "0");
-                        localStorage.setItem("vexo_pool_" + inviterId, String(prevPool + 20));
-                        localStorage.setItem("vexo_ref_earn_" + inviterId, String(prevEarn + 20));
+                        localStorage.setItem("vexo_pool_" + inviterId, String(prevPool + 0.05));
+                        localStorage.setItem("vexo_ref_earn_" + inviterId, String(prevEarn + 0.05));
                     }
                 }
             }
@@ -1335,9 +1350,9 @@
             const grid = document.getElementById("vexo-levels-grid");
             let html = "";
             for (let lv = lvlStart; lv <= lvlEnd; lv++) {
-                const reqVexo = lv === 1 ? 0 : (lv - 1) * 50;
-                const priceUsd = (reqVexo * tokenPrice).toFixed(3);
-                const rateHr = (0.05 + (lv - 1) * 0.02).toFixed(2);
+                const reqVexo = lv === 1 ? 0 : (lv - 1) * 5;
+                const priceUsd = (reqVexo * tokenPrice).toFixed(5);
+                const rateHr = (0.0001 + (lv - 1) * 0.00005).toFixed(5);
                 const isCur = lv === userState.level;
                 const unlocked = lv <= userState.level;
                 html += `
@@ -1348,7 +1363,7 @@
                         </div>
                         <div class="lvl-price-txt">${lv === 1 ? "0 $" : priceUsd + " $"}</div>
                         <div style="font-size:0.68rem; color:#cbd5e1; margin-bottom:6px;">${reqVexo} VEXO</div>
-                        <div class="lvl-meta">Speed: <b>0.20 TH/s</b><br>Rate: <b style="color:var(--cyan-bright);">+${rateHr} /hr</b></div>
+                        <div class="lvl-meta">Speed: <b>0.01 TH/s</b><br>Rate: <b style="color:var(--cyan-bright);">+${rateHr} /hr</b></div>
                         <button class="lvl-btn ${unlocked ? "lvl-btn-active" : "lvl-btn-buy"}">
                             ${isCur ? "✓ ACTIVE" : (unlocked ? "UNLOCKED" : "⚡ UNLOCK")}
                         </button>
@@ -1368,7 +1383,7 @@
         function openLevelModal(lv, reqVexo, priceUsd, rateHr, unlocked) {
             document.getElementById("lvl-modal-title").innerText = `Lvl ${lv}`;
             document.getElementById("lvl-modal-body").innerHTML = `
-                <div><b>Mining Speed:</b> <span style="color:var(--gold);">0.20 TH/s</span></div>
+                <div><b>Mining Speed:</b> <span style="color:var(--gold);">0.01 TH/s</span></div>
                 <div><b>Package Mining Rate:</b> <span style="color:var(--cyan-bright);">+${rateHr} VEXO/hr</span></div>
                 <div><b>Required Assets:</b> <span style="color:var(--cyan-bright);">${reqVexo} VEXO ($${priceUsd})</span></div>
                 <div><b>Your Assets:</b> <span style="color:#ec4899;">${(userState.holding + userState.pool).toFixed(4)} VEXO</span></div>
@@ -1457,6 +1472,7 @@
         function renderUI() {
             const isAdmin = String(uid) === ADMIN_ID;
             document.getElementById("vexo-admin-btn").style.display = isAdmin ? "inline-block" : "none";
+            checkMultiAccountGuard();
             if (controls.maintenance_mode && !isAdmin) {
                 showBlockScreen("VEXO MINING UPDATE", "Vexo Mining is currently under update by Admin.");
                 document.getElementById("block-channel-btns").innerHTML = "";
@@ -1480,18 +1496,22 @@
             document.getElementById("prof-fullname").innerText = tgFirstName;
             document.getElementById("prof-tg-username").innerText = tgUsername;
             document.getElementById("prof-uid").innerText = uid;
+
+            const unitBirr = (tokenPrice * ETB_RATE).toFixed(4);
             document.getElementById("vexo-price").innerText = tokenPrice.toFixed(6);
+            document.getElementById("vexo-birr-unit").innerText = `${unitBirr} ETB`;
 
             const totalVexo = userState.holding + userState.pool;
             const totalUsd = totalVexo * tokenPrice;
             const totalEtb = totalUsd * ETB_RATE;
 
             document.getElementById("total-vexo-balance").innerText = totalVexo.toFixed(4);
-            document.getElementById("total-usd-val").innerText = `$${totalUsd.toFixed(2)} USD`;
+            document.getElementById("total-usd-val").innerText = `$${totalUsd.toFixed(6)} USD`;
+            document.getElementById("assets-etb-usdt-line").innerText = `≈ ${totalEtb.toFixed(4)} ETB • $${totalUsd.toFixed(6)} USDT`;
             document.getElementById("holding-bal").innerText = `${userState.holding} VEXO`;
             document.getElementById("pool-bal").innerText = `${userState.pool.toFixed(4)} VEXO`;
             document.getElementById("prof-pool-val").innerText = `${userState.pool.toFixed(4)} VEXO`;
-            document.getElementById("prof-bal-etb-usdt").innerText = `${totalEtb.toFixed(2)} ETB • $${totalUsd.toFixed(2)} USDT`;
+            document.getElementById("prof-bal-etb-usdt").innerText = `${totalEtb.toFixed(4)} ETB • $${totalUsd.toFixed(6)} USDT`;
 
             const wdInd = document.getElementById("prof-last-wd-indicator");
             wdInd.innerHTML = userState.lastWithdrawLabel ? `<span class="wd-minus-red">${userState.lastWithdrawLabel}</span>` : "";
@@ -1507,8 +1527,11 @@
                 ).join("");
             }
 
+            const pendUsd = userState.pending * tokenPrice;
+            const pendEtb = pendUsd * ETB_RATE;
             document.getElementById("pending-vexo").innerText = userState.pending.toFixed(4);
-            document.getElementById("pending-usd").innerText = (userState.pending * tokenPrice).toFixed(4);
+            document.getElementById("pending-usd").innerText = `≈ $${pendUsd.toFixed(6)} USD`;
+            document.getElementById("pending-etb-usdt-line").innerText = `≈ ${pendEtb.toFixed(4)} ETB • $${pendUsd.toFixed(6)} USDT`;
             document.getElementById("active-timer-txt").innerText = formatSec(userState.activeSec);
 
             const l = langs[curLang] || DEFAULT_LANGS.EN;
@@ -1568,7 +1591,7 @@
         function tapCoreBoost() {
             if (!controls.mining_enabled || !controls.boost_tap_enabled) return;
             if (!userState.mining) userState.mining = true;
-            userState.pending += 0.0005;
+            userState.pending += 0.00001;
             saveUserState();
         }
 
@@ -1876,8 +1899,8 @@
             const dir = JSON.parse(localStorage.getItem("vexo_users_directory") || "{}");
             const uObj = dir[targetId];
             if (!uObj) return;
-            const uEtb = ((parseFloat(uObj.pool || 0) + parseFloat(uObj.holding || 0)) * tokenPrice * ETB_RATE).toFixed(2);
-            const uUsdt = ((parseFloat(uObj.pool || 0) + parseFloat(uObj.holding || 0)) * tokenPrice).toFixed(2);
+            const uEtb = ((parseFloat(uObj.pool || 0) + parseFloat(uObj.holding || 0)) * tokenPrice * ETB_RATE).toFixed(4);
+            const uUsdt = ((parseFloat(uObj.pool || 0) + parseFloat(uObj.holding || 0)) * tokenPrice).toFixed(6);
 
             document.getElementById("adm-selected-user-detail").innerHTML = `
                 <div class="user-stat-detail">
@@ -1924,7 +1947,7 @@
             const kind = document.getElementById("adm-item-kind").value;
             const title = document.getElementById("adm-item-title").value.trim();
             const url = document.getElementById("adm-item-url").value.trim();
-            const reward = parseFloat(document.getElementById("adm-item-reward").value || "5");
+            const reward = parseFloat(document.getElementById("adm-item-reward").value || "0.01");
             if (!title || !url) { showToast("⚠️ Enter title and URL."); return; }
             const obj = { id: "item_" + Date.now(), title, url, reward };
             if (kind === "ad") { customAds.push(obj); localStorage.setItem("vexo_custom_ads", JSON.stringify(customAds)); }
@@ -1994,7 +2017,7 @@
         setInterval(() => {
             if (userState.mining && controls.mining_enabled) {
                 userState.activeSec += 1;
-                userState.pending += 0.0001;
+                userState.pending += 0.00001;
                 saveUserState();
             }
         }, 1000);
@@ -2016,8 +2039,3 @@
     </script>
 </body>
 </html>
-
-
-Eshi ahun degmo ezih github code lay ehenn astekaklkgn
-1.ye vexo waga wordual chemrew yevexo waga tnsh chemrew bedeb yec1 vexo waga bebrm be dollarm chemrew
-2.degmo kesr kevexo sir be vexo lk ne etb be usdt yasay mn yahl edalachew
